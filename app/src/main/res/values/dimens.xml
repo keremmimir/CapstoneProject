@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    //margin
+    <dimen name="margin_xsmall">4dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+    <dimen name="margin_xlarge">32dp</dimen>
+    <dimen name="margin_xxlarge">64dp</dimen>
+
+    //padding
+    <dimen name="padding_small">8dp</dimen>
+
+    //string
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_medium">20sp</dimen>
+    <dimen name="text_size_large">32sp</dimen>
+    <dimen name="text_size_xlarge">64sp</dimen>
+
+    //button
+    <dimen name="button_radius">10dp</dimen>
+    <dimen name="button_width">2dp</dimen>
+
+    //input
+    <dimen name="input_radius">5dp</dimen>
+    <dimen name="input_width">1dp</dimen>
+    <dimen name="input_height">40dp</dimen>
+
+    //radius
+    <dimen name="radius">20dp</dimen>
+</resources>

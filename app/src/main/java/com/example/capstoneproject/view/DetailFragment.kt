@@ -1,16 +1,20 @@
-package com.example.capstoneproject.View
+package com.example.capstoneproject.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.example.capstoneproject.databinding.FragmentDetailBinding
 
 
 class DetailFragment : Fragment() {
+
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
+    private val args by navArgs<DetailFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,6 +27,22 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        with(binding){
+            Glide.with(view.context).apply {
+                load(args.data.bigImage).into(imageBig)
+                load(args.data.image).override(500,500).into(image)
+            }
+            title.text = args.data.title
+            val genreList = args.data.genre
+            if (genreList != null){
+                val joinGenre = genreList.joinToString (separator = ", ")
+                genre.text = joinGenre
+            }
+            year.text = args.data.year
+            rating.text = args.data.rating
+            description.text = args.data.description
+        }
     }
 
     override fun onDestroyView() {

@@ -1,14 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".View.HomeFragment">
+    android:background="@color/background"
+    tools:context=".view.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewMovies"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/margin_xlarge"
+        android:layout_marginTop="@dimen/margin_xxlarge"
+        android:layout_marginEnd="@dimen/margin_xlarge"
+        app:cardBackgroundColor="@color/cardView"
+        app:cardCornerRadius="@dimen/radius"
+        app:layout_constraintBottom_toTopOf="@+id/cardViewSeries"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
 
-</FrameLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/movies" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewSeries"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/margin_xlarge"
+        android:layout_marginTop="@dimen/margin_xlarge"
+        android:layout_marginEnd="@dimen/margin_xlarge"
+        android:layout_marginBottom="@dimen/margin_xxlarge"
+        app:cardCornerRadius="@dimen/radius"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewMovies">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/series" />
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

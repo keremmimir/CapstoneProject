@@ -1,6 +1,6 @@
-package com.example.capstoneproject.Service
+package com.example.capstoneproject.service
 
-import com.example.capstoneproject.Model.DataModel
+import com.example.capstoneproject.model.DataModel
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers

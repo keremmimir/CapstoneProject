@@ -1,6 +1,6 @@
-package com.example.capstoneproject.Service
+package com.example.capstoneproject.service
 
-import com.example.capstoneproject.Model.DataModel
+import com.example.capstoneproject.model.DataModel
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
