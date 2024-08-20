@@ -9,15 +9,12 @@ object IMDbMoviesAPIService {
     private val BASE_URL = "https://imdb-top-100-movies.p.rapidapi.com/"
 
     private val retrofit: Retrofit by lazy {
-        val gson = GsonBuilder()
-            .registerTypeAdapter(DataModel::class.java, ShowDeserializer())
-            .create()
-
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+
     fun getIMDbAPI(): IMDbMoviesAPI {
         return retrofit.create(IMDbMoviesAPI::class.java)
     }

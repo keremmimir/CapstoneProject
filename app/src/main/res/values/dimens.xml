@@ -12,6 +12,7 @@
     <dimen name="padding_small">8dp</dimen>
 
     //string
+    <dimen name="text_size_xsmall">12sp</dimen>
     <dimen name="text_size_small">14sp</dimen>
     <dimen name="text_size_medium">20sp</dimen>
     <dimen name="text_size_large">32sp</dimen>

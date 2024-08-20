@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">CapstoneProject</string>
 
-    <string name="sign_up">SIGN UP</string>
+    <string name="sign_up">CREATE ACCOUNT</string>
     <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="surname">Surname</string>
@@ -17,4 +17,8 @@
     <string name="menu_home">Home</string>
     <string name="menu_favorite">Favorite</string>
     <string name="menu_logout">Logout</string>
+    <string name="back_list_menu">BACK LIST MENU</string>
+    <string name="back_list">BACK LIST</string>
+    <string name="back">BACK</string>
+    <string name="imdbLink">Go to IMDb -></string>
 </resources>
