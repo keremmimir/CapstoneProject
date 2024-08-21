@@ -1,5 +1,6 @@
 package com.example.capstoneproject.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,6 +30,7 @@ class ListViewModel(private val sharedPreferencesRepository: SharedPreferencesRe
                     if (response.isSuccessful){
                         movies.value = response.body()?.map { it.toDataModel() }
                         updateFavorites()
+                        Log.d("deneme","deneme")
                     }else{
                         error.value = "Error : ${response.message()}"
                     }

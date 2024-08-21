@@ -57,7 +57,6 @@ class FavoriteFragment : Fragment() {
                         FavoriteFragmentDirections.actionFavoriteFragmentToDetailFragment(data = dataModel )
                     findNavController().navigate(action)
                 }
-
             }
         })
     }
