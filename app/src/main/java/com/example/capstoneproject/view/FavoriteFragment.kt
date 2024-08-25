@@ -37,29 +37,31 @@ class FavoriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = MoviesAdapter(favoriteMoviesList, viewModel)
-        binding.FavRecylerView.adapter = adapter
-
         observeData()
-
-        binding.backHome.setOnClickListener {
-            findNavController().navigateUp()
-        }
+        setupViews()
     }
 
     private fun observeData() {
         viewModel.favorites.observe(viewLifecycleOwner, Observer { favorite ->
             favorite?.let {
                 adapter.updateData(favorite)
-
-                adapter.onClick = {dataModel->
-                    val action =
-                        FavoriteFragmentDirections.actionFavoriteFragmentToDetailFragment(data = dataModel )
-                    findNavController().navigate(action)
-                }
-
             }
         })
+    }
+
+    private fun setupViews(){
+        adapter = MoviesAdapter(favoriteMoviesList, viewModel)
+        binding.FavRecylerView.adapter = adapter
+
+        binding.backHome.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        adapter.onClick = {dataModel->
+            val action =
+                FavoriteFragmentDirections.actionFavoriteFragmentToDetailFragment(data = dataModel )
+            findNavController().navigate(action)
+        }
     }
 
     override fun onDestroyView() {

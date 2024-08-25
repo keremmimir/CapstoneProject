@@ -64,6 +64,7 @@ class ListFragment : Fragment() {
             }
         })
     }
+
     private fun setupViews(){
         adapter = MoviesAdapter(dataList, viewModel)
         binding.recylerView.adapter = adapter
@@ -72,10 +73,7 @@ class ListFragment : Fragment() {
             val action = ListFragmentDirections.actionListFragmentToDetailFragment(data)
             findNavController().navigate(action)
         }
-        adapter.onClick = { data ->
-            val action = ListFragmentDirections.actionListFragmentToDetailFragment(data)
-            findNavController().navigate(action)
-        }
+
         binding.backHome.setOnClickListener {
             val action = ListFragmentDirections.actionListFragmentToHomeFragment()
             findNavController().navigate(action)
