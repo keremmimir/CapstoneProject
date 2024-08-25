@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_xlarge"
                 android:background="@drawable/custom_input"
-                android:drawableStart="@drawable/ic_password"
+                android:drawableStart="@drawable/ic_key"
                 android:drawablePadding="@dimen/padding_small"
                 android:ems="10"
                 android:hint="@string/password"

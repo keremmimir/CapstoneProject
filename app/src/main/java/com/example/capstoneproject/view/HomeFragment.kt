@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.capstoneproject.databinding.FragmentHomeBinding
+import com.example.capstoneproject.repository.FirebaseAuthRepository
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class HomeFragment : Fragment() {
