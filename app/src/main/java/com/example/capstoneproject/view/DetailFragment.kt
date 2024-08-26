@@ -68,6 +68,7 @@ class DetailFragment : Fragment() {
             observerData()
         }
     }
+
     fun observerData(){
         viewModel.favorites.observe(viewLifecycleOwner, Observer { favorites ->
             updateFavButton(args.data.imdbId)

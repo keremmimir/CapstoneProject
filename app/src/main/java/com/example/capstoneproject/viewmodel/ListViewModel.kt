@@ -24,9 +24,12 @@ class ListViewModel() : ViewModel() {
     init {
         auth.addAuthStateListener { auth ->
             val user = auth.currentUser
-            user?.uid?.let { loadFavorites(it) }
+            user?.uid?.let {
+                viewModelScope.launch {
+                    loadFavorites(it)
+                }
+            }
         }
-
         getMovies()
         getSeries()
     }
@@ -37,9 +40,9 @@ class ListViewModel() : ViewModel() {
                 try {
                     val response = imdbMoviesAPI.getMovies()
                     if (response.isSuccessful) {
+                        movies.value = response.body()?.map { it.toDataModel() }
                         val user = auth.currentUser
                         user?.uid?.let { loadFavorites(it) }
-                        movies.value = response.body()?.map { it.toDataModel() }
                     } else {
                         error.value = "Error : ${response.message()}"
                     }
@@ -56,9 +59,9 @@ class ListViewModel() : ViewModel() {
                 try {
                     val response = imdbMoviesAPI.getSeries()
                     if (response.isSuccessful) {
+                        series.value = response.body()?.map { it.toDataModel() }
                         val user = auth.currentUser
                         user?.uid?.let { loadFavorites(it) }
-                        series.value = response.body()?.map { it.toDataModel() }
                     } else {
                         error.value = "Error : ${response.message()}"
                     }
@@ -71,25 +74,36 @@ class ListViewModel() : ViewModel() {
 
     fun toggleFavorite(dataModel: DataModel) {
         val user = auth.currentUser
-        user?.let { user ->
-            dataModel.imdbId?.let {
-                firestore.isFavorite(user.uid, it) { isFavorited ->
-                    if (isFavorited) {
-                        firestore.removeFavorite(user.uid, dataModel.imdbId)
-                    } else {
-                        firestore.addFavorite(user.uid, dataModel.imdbId)
+        user?.let {
+            viewModelScope.launch {
+                try {
+                    val isFavorited = dataModel.imdbId?.let { imdbId ->
+                        firestore.isFavorite(user.uid, imdbId)
+                    } ?: false
+
+                    dataModel.imdbId?.let { imdbId ->
+                        if (isFavorited) {
+                            firestore.removeFavorite(user.uid, imdbId)
+                        } else {
+                            firestore.addFavorite(user.uid, imdbId)
+                        }
                     }
                     loadFavorites(user.uid)
+                } catch (e: Exception) {
+                    error.value = e.message
                 }
             }
         }
     }
 
-    private fun loadFavorites(userId: String) {
-        firestore.getFavoriteIds(userId) { favoriteIds ->
+    private suspend fun loadFavorites(userId: String) {
+        try {
+            val favoriteIds = firestore.getFavoriteIds(userId)
             val combinedList = (movies.value ?: emptyList()) + (series.value ?: emptyList())
             val favoriteList = combinedList.filter { it.imdbId in favoriteIds }
             favorites.value = favoriteList
+        } catch (e: Exception) {
+            error.value = e.message
         }
     }
 }

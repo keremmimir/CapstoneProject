@@ -1,39 +1,45 @@
 package com.example.capstoneproject.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 
 class FirebaseFavoriteRepository {
     private val firestore = FirebaseFirestore.getInstance()
 
-    fun addFavorite(userId: String, imdbId: String) {
+    suspend fun addFavorite(userId: String, imdbId: String) {
         val favoriteRef = firestore.collection("users").document(userId)
             .collection("favorites").document(imdbId)
 
-        favoriteRef.set(mapOf("itemId" to imdbId))
+        favoriteRef.set(mapOf("itemId" to imdbId)).await()
     }
 
-    fun removeFavorite(userId: String, imdbId: String) {
+    suspend fun removeFavorite(userId: String, imdbId: String) {
         val favoriteRef = firestore.collection("users").document(userId)
             .collection("favorites").document(imdbId)
 
-        favoriteRef.delete()
+        favoriteRef.delete().await()
     }
 
-    fun isFavorite(userId: String, imdbId: String, callback: (Boolean) -> Unit) {
+    suspend fun isFavorite(userId: String, imdbId: String): Boolean {
         val favoriteRef = firestore.collection("users").document(userId)
             .collection("favorites").document(imdbId)
 
-        favoriteRef.get().addOnSuccessListener { document ->
-            callback(document.exists())
+        return try {
+            val document = favoriteRef.get().await()
+            document.exists()
+        } catch (e: Exception) {
+            false
         }
     }
 
-    fun getFavoriteIds(userId: String, callback: (Set<String>) -> Unit) {
-        firestore.collection("users").document(userId)
-            .collection("favorites").get()
-            .addOnSuccessListener { result ->
-                val favoriteIds = result.map { it.id }.toSet()
-                callback(favoriteIds)
-            }
+    suspend fun getFavoriteIds(userId: String): Set<String> {
+        return try {
+            val result = firestore.collection("users").document(userId)
+                .collection("favorites").get().await()
+
+            result.map { it.id }.toSet()
+        } catch (e: Exception) {
+            emptySet()
+        }
     }
 }
