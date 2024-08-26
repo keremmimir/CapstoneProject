@@ -11,18 +11,16 @@ import androidx.navigation.fragment.findNavController
 import com.example.capstoneproject.adapter.MoviesAdapter
 import com.example.capstoneproject.databinding.FragmentFavoriteBinding
 import com.example.capstoneproject.model.DataModel
-import com.example.capstoneproject.repository.SharedPreferencesRepository
 import com.example.capstoneproject.viewmodel.ListViewModel
-import com.example.capstoneproject.viewmodel.ListViewModelFactory
 
 
 class FavoriteFragment : Fragment() {
 
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: ListViewModel by activityViewModels {
-        ListViewModelFactory(SharedPreferencesRepository(requireContext()))
-    }
+    private val viewModel: ListViewModel by activityViewModels()
+
+
     private lateinit var adapter: MoviesAdapter
     val favoriteMoviesList = ArrayList<DataModel>()
 
