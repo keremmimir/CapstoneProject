@@ -9,7 +9,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.capstoneproject.databinding.FragmentHomeBinding
 import com.example.capstoneproject.model.Type
 
-
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null

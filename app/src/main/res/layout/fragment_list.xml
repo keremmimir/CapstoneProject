@@ -38,8 +38,8 @@
         android:textColor="@color/white"
         android:textStyle="bold"
         android:textSize="@dimen/text_size_xsmall"
-        app:layout_constraintBottom_toBottomOf="@+id/backHome"
-        app:layout_constraintStart_toEndOf="@+id/backHome"
-        app:layout_constraintTop_toTopOf="@+id/backHome" />
+        app:layout_constraintBottom_toBottomOf="@id/backHome"
+        app:layout_constraintStart_toEndOf="@id/backHome"
+        app:layout_constraintTop_toTopOf="@id/backHome" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

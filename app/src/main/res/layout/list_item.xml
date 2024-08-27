@@ -46,9 +46,9 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/genre"
-                app:layout_constraintEnd_toStartOf="@+id/favButton"
-                app:layout_constraintStart_toEndOf="@+id/image"
+                app:layout_constraintBottom_toTopOf="@id/genre"
+                app:layout_constraintEnd_toStartOf="@id/favButton"
+                app:layout_constraintStart_toEndOf="@id/image"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.5"
                 app:layout_constraintVertical_chainStyle="packed" />
@@ -61,10 +61,10 @@
                 android:text="@string/genre"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_small"
-                app:layout_constraintBottom_toTopOf="@+id/year"
-                app:layout_constraintEnd_toEndOf="@+id/title"
-                app:layout_constraintStart_toStartOf="@+id/title"
-                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintBottom_toTopOf="@id/year"
+                app:layout_constraintEnd_toEndOf="@id/title"
+                app:layout_constraintStart_toStartOf="@id/title"
+                app:layout_constraintTop_toBottomOf="@id/title"
                 app:layout_constraintVertical_bias="0.5" />
 
             <TextView
@@ -75,9 +75,9 @@
                 android:text="@string/year"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_small"
-                app:layout_constraintBottom_toTopOf="@+id/ratingImageView"
-                app:layout_constraintStart_toStartOf="@+id/genre"
-                app:layout_constraintTop_toBottomOf="@+id/genre"
+                app:layout_constraintBottom_toTopOf="@id/ratingImageView"
+                app:layout_constraintStart_toStartOf="@id/genre"
+                app:layout_constraintTop_toBottomOf="@id/genre"
                 app:layout_constraintVertical_bias="0.5" />
 
             <TextView
@@ -88,9 +88,9 @@
                 android:text="@string/rating"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_small"
-                app:layout_constraintBottom_toBottomOf="@+id/ratingImageView"
-                app:layout_constraintStart_toEndOf="@+id/ratingImageView"
-                app:layout_constraintTop_toTopOf="@+id/ratingImageView" />
+                app:layout_constraintBottom_toBottomOf="@id/ratingImageView"
+                app:layout_constraintStart_toEndOf="@id/ratingImageView"
+                app:layout_constraintTop_toTopOf="@id/ratingImageView" />
 
             <ImageView
                 android:id="@+id/ratingImageView"
@@ -98,8 +98,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/year"
-                app:layout_constraintTop_toBottomOf="@+id/year"
+                app:layout_constraintStart_toStartOf="@id/year"
+                app:layout_constraintTop_toBottomOf="@id/year"
                 app:layout_constraintVertical_bias="0.5"
                 app:srcCompat="@drawable/rating_star" />
 
@@ -110,7 +110,7 @@
                 android:layout_marginEnd="@dimen/margin_small"
                 android:background="@drawable/popcorn_border"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/image" />
+                app:layout_constraintTop_toTopOf="@id/image" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

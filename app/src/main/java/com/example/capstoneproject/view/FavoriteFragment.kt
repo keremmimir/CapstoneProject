@@ -10,11 +10,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.capstoneproject.adapter.MoviesAdapter
 import com.example.capstoneproject.databinding.FragmentFavoriteBinding
-import com.example.capstoneproject.model.DataModel
 import com.example.capstoneproject.repository.SharedPreferencesRepository
 import com.example.capstoneproject.viewmodel.ListViewModel
 import com.example.capstoneproject.viewmodel.ListViewModelFactory
-
 
 class FavoriteFragment : Fragment() {
 
@@ -24,7 +22,6 @@ class FavoriteFragment : Fragment() {
         ListViewModelFactory(SharedPreferencesRepository(requireContext()))
     }
     private lateinit var adapter: MoviesAdapter
-    val favoriteMoviesList = ArrayList<DataModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,13 +41,13 @@ class FavoriteFragment : Fragment() {
     private fun observeData() {
         viewModel.favorites.observe(viewLifecycleOwner, Observer { favorite ->
             favorite?.let {
-                adapter.updateData(favorite)
+                adapter.submitList(favorite)
             }
         })
     }
 
     private fun setupViews(){
-        adapter = MoviesAdapter(favoriteMoviesList, viewModel)
+        adapter = MoviesAdapter(viewModel)
         binding.FavRecylerView.adapter = adapter
 
         binding.backHome.setOnClickListener {

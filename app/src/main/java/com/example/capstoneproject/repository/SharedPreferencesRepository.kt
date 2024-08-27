@@ -1,10 +1,11 @@
 package com.example.capstoneproject.repository
 
 import android.content.Context
+import com.example.capstoneproject.constants.Constants
 
 class SharedPreferencesRepository(private val context: Context) {
 
-    private val sharedPref = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+    private val sharedPref = context.getSharedPreferences(Constants.SHAREDPREF, Context.MODE_PRIVATE)
 
     fun isFavorite(id: String): Boolean {
         return sharedPref.getBoolean(id, false)
