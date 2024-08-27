@@ -17,7 +17,6 @@ import com.example.capstoneproject.repository.SharedPreferencesRepository
 import com.example.capstoneproject.viewmodel.ListViewModel
 import com.example.capstoneproject.viewmodel.ListViewModelFactory
 
-
 class DetailFragment : Fragment() {
 
     private var _binding: FragmentDetailBinding? = null

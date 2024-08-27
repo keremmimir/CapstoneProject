@@ -13,7 +13,6 @@ import com.example.capstoneproject.R
 import com.example.capstoneproject.databinding.FragmentSignUpBinding
 import com.example.capstoneproject.viewmodel.AuthViewModel
 
-
 class SignUpFragment : Fragment() {
 
     private var _binding: FragmentSignUpBinding? = null
@@ -38,24 +37,23 @@ class SignUpFragment : Fragment() {
 
     fun observeData() {
         authViewModel.authResult.observe(viewLifecycleOwner, Observer { result ->
-            result.let {
-                if (it != null) {
-                    if (it.isSuccess) {
-                        Toast.makeText(requireContext(), it.getOrNull(), Toast.LENGTH_LONG).show()
-                        navigateToSignInPage()
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            it.exceptionOrNull()?.message,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
+            result?.let {
+                if (it.isSuccess) {
+                    Toast.makeText(requireContext(), it.getOrNull(), Toast.LENGTH_LONG).show()
+                    navigateToSignInPage()
+                    authViewModel.authResult.value = null
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        it.exceptionOrNull()?.message,
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         })
     }
 
-    private fun setupViews(){
+    private fun setupViews() {
         with(binding) {
             SignUpButton.setOnClickListener {
                 val name = signUpName.text.toString()
@@ -65,7 +63,7 @@ class SignUpFragment : Fragment() {
                 if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(
                         requireContext(),
-                        "Name, surname, email, and password cannot be empty",
+                        getString(R.string.sign_up_empty),
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {

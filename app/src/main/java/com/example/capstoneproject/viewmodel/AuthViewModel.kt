@@ -1,5 +1,6 @@
 package com.example.capstoneproject.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,7 +8,7 @@ import com.example.capstoneproject.repository.FirebaseAuthRepository
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 
-class AuthViewModel : ViewModel() {
+class AuthViewModel() : ViewModel() {
     private val authRepository = FirebaseAuthRepository()
 
     val authResult = MutableLiveData<Result<String>?>()

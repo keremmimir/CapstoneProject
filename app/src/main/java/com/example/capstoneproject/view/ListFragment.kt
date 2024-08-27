@@ -7,9 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.capstoneproject.viewmodel.ListViewModel
@@ -18,7 +16,6 @@ import com.example.capstoneproject.adapter.MoviesAdapter
 import com.example.capstoneproject.databinding.FragmentListBinding
 import com.example.capstoneproject.repository.SharedPreferencesRepository
 import com.example.capstoneproject.viewmodel.ListViewModelFactory
-
 
 class ListFragment : Fragment() {
 

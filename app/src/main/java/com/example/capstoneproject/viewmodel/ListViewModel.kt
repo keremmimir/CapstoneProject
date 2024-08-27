@@ -30,7 +30,6 @@ class ListViewModel(private val sharedPreferencesRepository: SharedPreferencesRe
                     if (response.isSuccessful){
                         movies.value = response.body()?.map { it.toDataModel() }
                         updateFavorites()
-                        Log.d("deneme","deneme")
                     }else{
                         error.value = "Error : ${response.message()}"
                     }

@@ -15,7 +15,6 @@ import com.example.capstoneproject.repository.SharedPreferencesRepository
 import com.example.capstoneproject.viewmodel.ListViewModel
 import com.example.capstoneproject.viewmodel.ListViewModelFactory
 
-
 class FavoriteFragment : Fragment() {
 
     private var _binding: FragmentFavoriteBinding? = null

@@ -21,4 +21,6 @@
     <string name="back_list">BACK LIST</string>
     <string name="back">BACK</string>
     <string name="imdbLink">Go to IMDb -></string>
+    <string name="sign_in_empty">Email and Password cannot be empty</string>
+    <string name="sign_up_empty">Name, surname, email, and password cannot be empty</string>
 </resources>
