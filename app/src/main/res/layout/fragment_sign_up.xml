@@ -16,7 +16,7 @@
         android:textColor="@color/white"
         android:textStyle="bold"
         android:textSize="@dimen/text_size_large"
-        app:layout_constraintBottom_toTopOf="@+id/SignUpCardView"
+        app:layout_constraintBottom_toTopOf="@id/SignUpCardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -51,7 +51,7 @@
                 android:hint="@string/name"
                 android:inputType="text"
                 android:paddingStart="@dimen/padding_small"
-                app:layout_constraintBottom_toTopOf="@+id/signUpSurname"
+                app:layout_constraintBottom_toTopOf="@id/signUpSurname"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -69,11 +69,11 @@
                 android:hint="@string/surname"
                 android:inputType="text"
                 android:paddingStart="@dimen/padding_small"
-                app:layout_constraintBottom_toTopOf="@+id/signUpEmail"
-                app:layout_constraintEnd_toEndOf="@+id/signUpName"
+                app:layout_constraintBottom_toTopOf="@id/signUpEmail"
+                app:layout_constraintEnd_toEndOf="@id/signUpName"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/signUpName"
-                app:layout_constraintTop_toBottomOf="@+id/signUpName" />
+                app:layout_constraintStart_toStartOf="@id/signUpName"
+                app:layout_constraintTop_toBottomOf="@id/signUpName" />
 
             <EditText
                 android:id="@+id/signUpEmail"
@@ -87,11 +87,11 @@
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
                 android:paddingStart="@dimen/padding_small"
-                app:layout_constraintBottom_toTopOf="@+id/signUpPassword"
-                app:layout_constraintEnd_toEndOf="@+id/signUpSurname"
+                app:layout_constraintBottom_toTopOf="@id/signUpPassword"
+                app:layout_constraintEnd_toEndOf="@id/signUpSurname"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/signUpSurname"
-                app:layout_constraintTop_toBottomOf="@+id/signUpSurname" />
+                app:layout_constraintStart_toStartOf="@id/signUpSurname"
+                app:layout_constraintTop_toBottomOf="@id/signUpSurname" />
 
             <EditText
                 android:id="@+id/signUpPassword"
@@ -105,11 +105,11 @@
                 android:hint="@string/password"
                 android:inputType="textPassword"
                 android:paddingStart="@dimen/padding_small"
-                app:layout_constraintBottom_toTopOf="@+id/SignUpButton"
-                app:layout_constraintEnd_toEndOf="@+id/signUpEmail"
+                app:layout_constraintBottom_toTopOf="@id/SignUpButton"
+                app:layout_constraintEnd_toEndOf="@id/signUpEmail"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/signUpEmail"
-                app:layout_constraintTop_toBottomOf="@+id/signUpEmail" />
+                app:layout_constraintStart_toStartOf="@id/signUpEmail"
+                app:layout_constraintTop_toBottomOf="@id/signUpEmail" />
 
             <Button
                 android:id="@+id/SignUpButton"
@@ -122,10 +122,10 @@
                 android:textColor="@color/white"
                 android:padding="@dimen/padding_small"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/signUpPassword"
+                app:layout_constraintEnd_toEndOf="@id/signUpPassword"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/signUpPassword"
-                app:layout_constraintTop_toBottomOf="@+id/signUpPassword" />
+                app:layout_constraintStart_toStartOf="@id/signUpPassword"
+                app:layout_constraintTop_toBottomOf="@id/signUpPassword" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -6,9 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.example.capstoneproject.R
 import com.example.capstoneproject.databinding.FragmentSignInBinding
-
 
 class SignInFragment : Fragment() {
 
