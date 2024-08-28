@@ -8,23 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.capstoneproject.R
 import com.example.capstoneproject.databinding.FragmentDetailBinding
-import com.example.capstoneproject.repository.SharedPreferencesRepository
 import com.example.capstoneproject.viewmodel.ListViewModel
-import com.example.capstoneproject.viewmodel.ListViewModelFactory
 
 class DetailFragment : Fragment() {
 
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
     private val args by navArgs<DetailFragmentArgs>()
-    private val viewModel: ListViewModel by activityViewModels {
-        ListViewModelFactory(SharedPreferencesRepository(requireContext()))
-    }
+    private val viewModel: ListViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -56,7 +53,7 @@ class DetailFragment : Fragment() {
 
             favButton.setOnClickListener {
                 viewModel.toggleFavorite(args.data)
-                updateFavButton(args.data.imdbId)
+
             }
 
             backHome.setOnClickListener {
@@ -66,7 +63,15 @@ class DetailFragment : Fragment() {
             imdbLink.setOnClickListener {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(args.data.imdbLink)))
             }
+
+            observerData()
         }
+    }
+
+    fun observerData(){
+        viewModel.favorites.observe(viewLifecycleOwner, Observer { favorites ->
+            updateFavButton(args.data.imdbId)
+        })
     }
 
     private fun updateFavButton(itemId: String?) {

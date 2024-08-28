@@ -13,18 +13,16 @@ import androidx.navigation.fragment.navArgs
 import com.example.capstoneproject.viewmodel.ListViewModel
 import com.example.capstoneproject.adapter.MoviesAdapter
 import com.example.capstoneproject.databinding.FragmentListBinding
-import com.example.capstoneproject.repository.SharedPreferencesRepository
-import com.example.capstoneproject.viewmodel.ListViewModelFactory
 
 class ListFragment : Fragment() {
 
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: ListViewModel by activityViewModels {
-        ListViewModelFactory(SharedPreferencesRepository(requireContext()))
-    }
+    private val viewModel: ListViewModel by activityViewModels()
+
     private lateinit var adapter: MoviesAdapter
     private val args by navArgs<ListFragmentArgs>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -37,6 +35,7 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        adapter = MoviesAdapter(viewModel)
         val type = args.type
         viewModel.fetchData(type)
 
