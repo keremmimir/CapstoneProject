@@ -9,8 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.example.capstoneproject.R
 import com.example.capstoneproject.databinding.FragmentSignInBinding
+import com.example.capstoneproject.R
 import com.example.capstoneproject.viewmodel.AuthViewModel
 
 class SignInFragment : Fragment() {

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.capstoneproject.databinding.FragmentHomeBinding
+import com.example.capstoneproject.model.Type
 
 class HomeFragment : Fragment() {
 
@@ -26,11 +27,11 @@ class HomeFragment : Fragment() {
 
         with(binding) {
             cardViewMovies.setOnClickListener {
-                val action = HomeFragmentDirections.actionHomeFragmentToListFragment("movies")
+                val action = HomeFragmentDirections.actionHomeFragmentToListFragment(Type.MOVIES)
                 findNavController().navigate(action)
             }
             cardViewSeries.setOnClickListener {
-                val action = HomeFragmentDirections.actionHomeFragmentToListFragment("series")
+                val action = HomeFragmentDirections.actionHomeFragmentToListFragment(Type.SERIES)
                 findNavController().navigate(action)
             }
         }

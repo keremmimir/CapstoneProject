@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -13,7 +15,7 @@ import com.example.capstoneproject.model.DataModel
 import com.example.capstoneproject.view.FavoriteFragment
 import com.example.capstoneproject.viewmodel.ListViewModel
 
-class MoviesAdapter(private val dataList: ArrayList<DataModel>, private val viewModel: ListViewModel) : RecyclerView.Adapter<MoviesAdapter.Holder>() {
+class MoviesAdapter(private val viewModel: ListViewModel) : ListAdapter<DataModel, MoviesAdapter.Holder>(DiffCallback()) {
 
     var onClick: ((DataModel) -> Unit)? = null
 
@@ -65,17 +67,18 @@ class MoviesAdapter(private val dataList: ArrayList<DataModel>, private val view
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bind(dataList[position])
+        holder.bind(getItem(position))
     }
 
-    override fun getItemCount(): Int {
-        return dataList.size
-    }
+    // DiffUtil ItemCallback
+    class DiffCallback : DiffUtil.ItemCallback<DataModel>() {
+        override fun areItemsTheSame(oldItem: DataModel, newItem: DataModel): Boolean {
+            return oldItem.imdbId == newItem.imdbId
+        }
 
-    fun updateData(newDataList: List<DataModel>) {
-        dataList.clear()
-        dataList.addAll(newDataList)
-        notifyDataSetChanged()
+        override fun areContentsTheSame(oldItem: DataModel, newItem: DataModel): Boolean {
+            return oldItem == newItem
+        }
     }
 }
 
