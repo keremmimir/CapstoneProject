@@ -1,7 +1,5 @@
-package com.example.capstoneproject.adapter
+package com.example.capstoneproject.ui.adapter
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -12,10 +10,11 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.capstoneproject.R
 import com.example.capstoneproject.databinding.ListItemBinding
 import com.example.capstoneproject.model.DataModel
-import com.example.capstoneproject.view.FavoriteFragment
-import com.example.capstoneproject.viewmodel.ListViewModel
+import com.example.capstoneproject.ui.list.ListViewModel
 
-class MoviesAdapter(private val viewModel: ListViewModel) : ListAdapter<DataModel, MoviesAdapter.Holder>(DiffCallback()) {
+class MoviesAdapter(private val viewModel: ListViewModel) : ListAdapter<DataModel, MoviesAdapter.Holder>(
+    DiffCallback()
+) {
 
     var onClick: ((DataModel) -> Unit)? = null
 

@@ -1,4 +1,4 @@
-package com.example.capstoneproject.service
+package com.example.capstoneproject.network
 
 import com.example.capstoneproject.BuildConfig
 import okhttp3.Interceptor

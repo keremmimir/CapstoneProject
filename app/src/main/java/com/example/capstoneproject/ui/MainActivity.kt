@@ -1,4 +1,4 @@
-package com.example.capstoneproject.view
+package com.example.capstoneproject.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,7 +9,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.capstoneproject.R
 import com.example.capstoneproject.databinding.ActivityMainBinding
-import com.example.capstoneproject.repository.FirebaseAuthRepository
+import com.example.capstoneproject.data.repository.FirebaseAuthRepository
 
 class MainActivity : AppCompatActivity() {
 

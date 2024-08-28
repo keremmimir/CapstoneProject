@@ -1,8 +1,6 @@
-package com.example.capstoneproject.service
+package com.example.capstoneproject.network
 
 import com.example.capstoneproject.constants.Constants
-import com.example.capstoneproject.model.DataModel
-import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

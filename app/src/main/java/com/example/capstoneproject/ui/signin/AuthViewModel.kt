@@ -1,10 +1,10 @@
-package com.example.capstoneproject.viewmodel
+package com.example.capstoneproject.ui.signin
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.capstoneproject.repository.FirebaseAuthRepository
+import com.example.capstoneproject.data.repository.FirebaseAuthRepository
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 

@@ -1,4 +1,4 @@
-package com.example.capstoneproject.repository
+package com.example.capstoneproject.data.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await

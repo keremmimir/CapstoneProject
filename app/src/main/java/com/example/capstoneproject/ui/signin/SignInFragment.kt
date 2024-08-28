@@ -1,4 +1,4 @@
-package com.example.capstoneproject.view
+package com.example.capstoneproject.ui.signin
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.capstoneproject.databinding.FragmentSignInBinding
 import com.example.capstoneproject.R
-import com.example.capstoneproject.viewmodel.AuthViewModel
 
 class SignInFragment : Fragment() {
 

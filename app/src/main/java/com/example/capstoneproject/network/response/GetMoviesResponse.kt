@@ -1,9 +1,7 @@
-package com.example.capstoneproject.service.response
+package com.example.capstoneproject.network.response
 
-import android.os.Parcelable
 import com.example.capstoneproject.model.DataModel
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
 
 
 data class GetMoviesResponse(

@@ -1,4 +1,4 @@
-package com.example.capstoneproject.view
+package com.example.capstoneproject.ui.list
 
 import android.os.Bundle
 import android.util.Log
@@ -10,8 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.capstoneproject.viewmodel.ListViewModel
-import com.example.capstoneproject.adapter.MoviesAdapter
+import com.example.capstoneproject.ui.adapter.MoviesAdapter
 import com.example.capstoneproject.databinding.FragmentListBinding
 import com.example.capstoneproject.model.Type
 

@@ -1,4 +1,4 @@
-package com.example.capstoneproject.view
+package com.example.capstoneproject.ui.favorite
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,10 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.example.capstoneproject.adapter.MoviesAdapter
+import com.example.capstoneproject.ui.adapter.MoviesAdapter
 import com.example.capstoneproject.databinding.FragmentFavoriteBinding
-import com.example.capstoneproject.model.DataModel
-import com.example.capstoneproject.viewmodel.ListViewModel
+import com.example.capstoneproject.ui.list.ListViewModel
 
 class FavoriteFragment : Fragment() {
 
@@ -55,7 +54,7 @@ class FavoriteFragment : Fragment() {
 
         adapter.onClick = {dataModel->
             val action =
-                FavoriteFragmentDirections.actionFavoriteFragmentToDetailFragment(data = dataModel )
+                FavoriteFragmentDirections.actionFavoriteFragmentToDetailFragment(data = dataModel)
             findNavController().navigate(action)
         }
     }

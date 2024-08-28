@@ -1,4 +1,4 @@
-package com.example.capstoneproject.view
+package com.example.capstoneproject.ui.detail
 
 import android.content.Intent
 import android.net.Uri
@@ -14,7 +14,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.capstoneproject.R
 import com.example.capstoneproject.databinding.FragmentDetailBinding
-import com.example.capstoneproject.viewmodel.ListViewModel
+import com.example.capstoneproject.ui.list.ListViewModel
 
 class DetailFragment : Fragment() {
 

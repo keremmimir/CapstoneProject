@@ -1,4 +1,4 @@
-package com.example.capstoneproject.repository
+package com.example.capstoneproject.data.repository
 
 import com.example.capstoneproject.constants.Constants
 import com.example.capstoneproject.model.User
