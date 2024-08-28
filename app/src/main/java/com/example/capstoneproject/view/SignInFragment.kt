@@ -23,7 +23,6 @@ class SignInFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         _binding = FragmentSignInBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -35,7 +34,7 @@ class SignInFragment : Fragment() {
         setupViews()
     }
 
-    fun observeData() {
+    private fun observeData() {
         authViewModel.authResult.observe(viewLifecycleOwner, Observer { result ->
             result?.let {
                 if (it.isSuccess) {
@@ -55,7 +54,7 @@ class SignInFragment : Fragment() {
 
     private fun setupViews() {
         with(binding) {
-            SignInButton.setOnClickListener {
+            signInButton.setOnClickListener {
                 val email = signInEmail.text.toString()
                 val password = signInPassword.text.toString()
                 if (email.isEmpty() || password.isEmpty()) {
