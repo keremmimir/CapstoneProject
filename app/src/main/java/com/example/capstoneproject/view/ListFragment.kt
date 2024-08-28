@@ -35,7 +35,7 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = MoviesAdapter(arrayListOf(), viewModel)
+        adapter = MoviesAdapter(viewModel)
         val type = args.type
         viewModel.fetchData(type)
 

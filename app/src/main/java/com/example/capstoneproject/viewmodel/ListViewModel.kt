@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.capstoneproject.model.DataModel
 import com.example.capstoneproject.repository.FirebaseFavoriteRepository
 import com.example.capstoneproject.model.Type
-import com.example.capstoneproject.repository.SharedPreferencesRepository
 import com.example.capstoneproject.service.IMDbMoviesAPI
 import com.example.capstoneproject.service.IMDbMoviesAPIService
 import com.example.capstoneproject.service.response.toDataModel
@@ -43,7 +42,7 @@ class ListViewModel() : ViewModel() {
         }
     }
 
-    private fun getMovies() {
+    fun getMovies() {
         if (movies.value.isNullOrEmpty()) {
             viewModelScope.launch {
                 try {
@@ -51,8 +50,10 @@ class ListViewModel() : ViewModel() {
                     if (response.isSuccessful) {
                         movies.value = response.body()?.map { it.toDataModel() }
                         val user = auth.currentUser
-                        user?.uid?.let { loadFavorites(it)
-                        } else {
+                        user?.uid?.let {
+                            loadFavorites(it)
+                        }
+                    } else {
                         error.value = "Error : ${response.message()}"
                     }
                 } catch (e: Exception) {
@@ -62,7 +63,8 @@ class ListViewModel() : ViewModel() {
         }
     }
 
-    private fun getSeries() {
+
+    fun getSeries() {
         if (series.value.isNullOrEmpty()) {
             viewModelScope.launch {
                 try {
@@ -70,16 +72,20 @@ class ListViewModel() : ViewModel() {
                     if (response.isSuccessful) {
                         series.value = response.body()?.map { it.toDataModel() }
                         val user = auth.currentUser
-                        user?.uid?.let { loadFavorites(it)
-                        }else{
+                        user?.uid?.let {
+                            loadFavorites(it)
+                        }
+                    } else {
                         error.value = "Error : ${response.message()}"
                     }
+
                 } catch (e: Exception) {
                     error.value = e.message
                 }
             }
         }
     }
+
 
     fun toggleFavorite(dataModel: DataModel) {
         val user = auth.currentUser
@@ -108,7 +114,8 @@ class ListViewModel() : ViewModel() {
     private suspend fun loadFavorites(userId: String) {
         try {
             val favoriteIds = firestore.getFavoriteIds(userId)
-            val combinedList = (movies.value ?: emptyList()) + (series.value ?: emptyList())
+            val combinedList =
+                (movies.value ?: emptyList()) + (series.value ?: emptyList())
             val favoriteList = combinedList.filter { it.imdbId in favoriteIds }
             favorites.value = favoriteList
         } catch (e: Exception) {
@@ -116,3 +123,4 @@ class ListViewModel() : ViewModel() {
         }
     }
 }
+
