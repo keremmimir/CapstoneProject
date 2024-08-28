@@ -16,7 +16,7 @@
         android:layout_marginEnd="@dimen/margin_xlarge"
         app:cardBackgroundColor="@color/cardView"
         app:cardCornerRadius="@dimen/radius"
-        app:layout_constraintBottom_toTopOf="@+id/cardViewSeries"
+        app:layout_constraintBottom_toTopOf="@id/cardViewSeries"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -42,7 +42,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardViewMovies">
+        app:layout_constraintTop_toBottomOf="@id/cardViewMovies">
 
         <ImageView
             android:layout_width="match_parent"

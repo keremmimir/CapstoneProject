@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.capstoneproject.model.DataModel
 import com.example.capstoneproject.repository.FirebaseFavoriteRepository
+import com.example.capstoneproject.model.Type
+import com.example.capstoneproject.repository.SharedPreferencesRepository
 import com.example.capstoneproject.service.IMDbMoviesAPI
 import com.example.capstoneproject.service.IMDbMoviesAPIService
 import com.example.capstoneproject.service.response.toDataModel
@@ -34,7 +36,14 @@ class ListViewModel() : ViewModel() {
         getSeries()
     }
 
-    fun getMovies() {
+    fun fetchData(type: Type) {
+        when (type) {
+            Type.MOVIES -> getMovies()
+            Type.SERIES -> getSeries()
+        }
+    }
+
+    private fun getMovies() {
         if (movies.value.isNullOrEmpty()) {
             viewModelScope.launch {
                 try {
@@ -42,8 +51,8 @@ class ListViewModel() : ViewModel() {
                     if (response.isSuccessful) {
                         movies.value = response.body()?.map { it.toDataModel() }
                         val user = auth.currentUser
-                        user?.uid?.let { loadFavorites(it) }
-                    } else {
+                        user?.uid?.let { loadFavorites(it)
+                        } else {
                         error.value = "Error : ${response.message()}"
                     }
                 } catch (e: Exception) {
@@ -53,7 +62,7 @@ class ListViewModel() : ViewModel() {
         }
     }
 
-    fun getSeries() {
+    private fun getSeries() {
         if (series.value.isNullOrEmpty()) {
             viewModelScope.launch {
                 try {
@@ -61,8 +70,8 @@ class ListViewModel() : ViewModel() {
                     if (response.isSuccessful) {
                         series.value = response.body()?.map { it.toDataModel() }
                         val user = auth.currentUser
-                        user?.uid?.let { loadFavorites(it) }
-                    } else {
+                        user?.uid?.let { loadFavorites(it)
+                        }else{
                         error.value = "Error : ${response.message()}"
                     }
                 } catch (e: Exception) {

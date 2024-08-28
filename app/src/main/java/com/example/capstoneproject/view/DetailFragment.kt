@@ -16,7 +16,6 @@ import com.example.capstoneproject.R
 import com.example.capstoneproject.databinding.FragmentDetailBinding
 import com.example.capstoneproject.viewmodel.ListViewModel
 
-
 class DetailFragment : Fragment() {
 
     private var _binding: FragmentDetailBinding? = null

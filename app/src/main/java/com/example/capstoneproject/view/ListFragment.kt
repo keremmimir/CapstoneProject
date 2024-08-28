@@ -11,10 +11,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.capstoneproject.viewmodel.ListViewModel
-import com.example.capstoneproject.model.DataModel
 import com.example.capstoneproject.adapter.MoviesAdapter
 import com.example.capstoneproject.databinding.FragmentListBinding
-
 
 class ListFragment : Fragment() {
 
@@ -38,11 +36,21 @@ class ListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = MoviesAdapter(arrayListOf(), viewModel)
+        val type = args.type
+        viewModel.fetchData(type)
+
+        setupViews()
+        observeData()
+    }
+
+    private fun setupViews() {
+        adapter = MoviesAdapter(viewModel)
         binding.recylerView.adapter = adapter
 
-        val listName = args.list
-
-        observeData(listName)
+        adapter.onClick = { data ->
+            val action = ListFragmentDirections.actionListFragmentToDetailFragment(data)
+            findNavController().navigate(action)
+        }
 
         binding.backHome.setOnClickListener {
             val action = ListFragmentDirections.actionListFragmentToHomeFragment()
@@ -50,31 +58,16 @@ class ListFragment : Fragment() {
         }
     }
 
-    private fun observeData(listName: String) {
-        if (listName == "movies") {
-            viewModel.movies.observe(viewLifecycleOwner, Observer { movies ->
-                adapter.updateData(movies)
-
-                adapter.onClick={
-                    val action = ListFragmentDirections.actionListFragmentToDetailFragment(it)
-                    findNavController().navigate(action)
-                }
-            })
-        } else if (listName == "series") {
-            viewModel.series.observe(viewLifecycleOwner, Observer { series ->
-                adapter.updateData(series)
-
-                adapter.onClick={
-                    val action = ListFragmentDirections.actionListFragmentToDetailFragment(it)
-                    findNavController().navigate(action)
-                }
-            })
-        }
-        viewModel.favorites.observe(viewLifecycleOwner, Observer { favorites ->
-            adapter.notifyDataSetChanged()
+    private fun observeData() {
+        viewModel.movies.observe(viewLifecycleOwner, Observer { movies ->
+            adapter.submitList(movies)
         })
 
-        viewModel.error.observe(viewLifecycleOwner, Observer { errorMessage ->
+        viewModel.movies.observe(viewLifecycleOwner, Observer { series ->
+            adapter.submitList(series)
+        })
+
+        viewModel.movies.observe(viewLifecycleOwner, Observer { errorMessage ->
             errorMessage?.let {
                 Log.e("ListFragment", "Error: $it")
             }

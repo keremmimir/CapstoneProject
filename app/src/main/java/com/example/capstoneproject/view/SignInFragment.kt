@@ -9,10 +9,9 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.example.capstoneproject.R
 import com.example.capstoneproject.databinding.FragmentSignInBinding
+import com.example.capstoneproject.R
 import com.example.capstoneproject.viewmodel.AuthViewModel
-
 
 class SignInFragment : Fragment() {
 
@@ -24,7 +23,6 @@ class SignInFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         _binding = FragmentSignInBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -36,34 +34,33 @@ class SignInFragment : Fragment() {
         setupViews()
     }
 
-    fun observeData() {
+    private fun observeData() {
         authViewModel.authResult.observe(viewLifecycleOwner, Observer { result ->
-            result.let {
-                if (it != null) {
-                    if (it.isSuccess) {
-                        Toast.makeText(requireContext(), it.getOrNull(), Toast.LENGTH_LONG).show()
-                        navigateToHomePage()
-                    } else {
-                        Toast.makeText(
-                            requireContext(),
-                            it.exceptionOrNull()?.message,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
+            result?.let {
+                if (it.isSuccess) {
+                    Toast.makeText(requireContext(), it.getOrNull(), Toast.LENGTH_LONG).show()
+                    navigateToHomePage()
+                    authViewModel.authResult.value = null
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        it.exceptionOrNull()?.message,
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         })
     }
 
-    private fun setupViews(){
+    private fun setupViews() {
         with(binding) {
-            SignInButton.setOnClickListener {
+            signInButton.setOnClickListener {
                 val email = signInEmail.text.toString()
                 val password = signInPassword.text.toString()
                 if (email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(
                         requireContext(),
-                        "Email and Password cannot be empty",
+                        getString(R.string.sign_in_empty),
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
@@ -76,7 +73,7 @@ class SignInFragment : Fragment() {
             }
         }
         val currentUser = authViewModel.getCurrentUser()
-        if (currentUser != null){
+        if (currentUser != null) {
             navigateToHomePage()
         }
     }
