@@ -32,9 +32,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getMovies()
-        viewModel.getSeries()
-
         with(binding) {
             cardViewMovies.setOnClickListener {
                 val action = HomeFragmentDirections.actionHomeFragmentToListFragment(Type.MOVIES)

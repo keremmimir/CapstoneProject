@@ -31,8 +31,6 @@ class ListViewModel() : ViewModel() {
                 }
             }
         }
-        getMovies()
-        getSeries()
     }
 
     fun fetchData(type: Type) {

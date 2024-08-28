@@ -13,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.capstoneproject.viewmodel.ListViewModel
 import com.example.capstoneproject.adapter.MoviesAdapter
 import com.example.capstoneproject.databinding.FragmentListBinding
+import com.example.capstoneproject.model.Type
 
 class ListFragment : Fragment() {
 
@@ -22,6 +23,8 @@ class ListFragment : Fragment() {
 
     private lateinit var adapter: MoviesAdapter
     private val args by navArgs<ListFragmentArgs>()
+
+    private lateinit var  type: Type
 
 
     override fun onCreateView(
@@ -36,7 +39,7 @@ class ListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = MoviesAdapter(viewModel)
-        val type = args.type
+        type = args.type
         viewModel.fetchData(type)
 
         setupViews()
@@ -59,15 +62,21 @@ class ListFragment : Fragment() {
     }
 
     private fun observeData() {
-        viewModel.movies.observe(viewLifecycleOwner, Observer { movies ->
-            adapter.submitList(movies)
-        })
+        when (type) {
+            Type.MOVIES -> {
+                viewModel.movies.observe(viewLifecycleOwner, Observer { movies ->
+                    adapter.submitList(movies)
+                })
+            }
 
-        viewModel.movies.observe(viewLifecycleOwner, Observer { series ->
-            adapter.submitList(series)
-        })
+            Type.SERIES -> {
+                viewModel.series.observe(viewLifecycleOwner, Observer { series ->
+                    adapter.submitList(series)
+                })
+            }
+        }
 
-        viewModel.movies.observe(viewLifecycleOwner, Observer { errorMessage ->
+        viewModel.error.observe(viewLifecycleOwner, Observer { errorMessage ->
             errorMessage?.let {
                 Log.e("ListFragment", "Error: $it")
             }
