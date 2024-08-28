@@ -52,7 +52,7 @@ class DetailFragment : Fragment() {
             updateFavButton(args.data.imdbId)
 
             favButton.setOnClickListener {
-                viewModel.toggleFavorite(args.data)
+               // viewModel.toggleFavorite(args.data)
 
             }
 

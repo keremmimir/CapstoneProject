@@ -11,13 +11,12 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.capstoneproject.R
 import com.example.capstoneproject.databinding.FragmentSignUpBinding
-import com.example.capstoneproject.ui.signin.AuthViewModel
 
 class SignUpFragment : Fragment() {
 
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
-    private val authViewModel: AuthViewModel by viewModels()
+    private val signUpViewModel: SignUpViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,16 +35,15 @@ class SignUpFragment : Fragment() {
     }
 
     fun observeData() {
-        authViewModel.authResult.observe(viewLifecycleOwner, Observer { result ->
-            result?.let {
-                if (it.isSuccess) {
-                    Toast.makeText(requireContext(), it.getOrNull(), Toast.LENGTH_LONG).show()
+        signUpViewModel.authResult.observe(viewLifecycleOwner, Observer { event ->
+            event.getContentIfNotHandled()?.let { result ->
+                if (result.isSuccess) {
+                    Toast.makeText(requireContext(), result.getOrNull(), Toast.LENGTH_LONG).show()
                     navigateToSignInPage()
-                    authViewModel.authResult.value = null
                 } else {
                     Toast.makeText(
                         requireContext(),
-                        it.exceptionOrNull()?.message,
+                        result.exceptionOrNull()?.message,
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -67,7 +65,7 @@ class SignUpFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
-                    authViewModel.signUp(name, surname, email, password)
+                    signUpViewModel.signUp(name, surname, email, password)
                 }
             }
         }

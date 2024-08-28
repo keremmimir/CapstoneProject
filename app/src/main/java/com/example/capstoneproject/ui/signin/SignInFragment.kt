@@ -16,7 +16,7 @@ class SignInFragment : Fragment() {
 
     private var _binding: FragmentSignInBinding? = null
     private val binding get() = _binding!!
-    private val authViewModel: AuthViewModel by viewModels()
+    private val signInViewModel: SignInViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,16 +34,15 @@ class SignInFragment : Fragment() {
     }
 
     private fun observeData() {
-        authViewModel.authResult.observe(viewLifecycleOwner, Observer { result ->
-            result?.let {
-                if (it.isSuccess) {
-                    Toast.makeText(requireContext(), it.getOrNull(), Toast.LENGTH_LONG).show()
+        signInViewModel.authResult.observe(viewLifecycleOwner, Observer { event ->
+            event.getContentIfNotHandled()?.let { result ->
+                if (result.isSuccess) {
+                    Toast.makeText(requireContext(), result.getOrNull(), Toast.LENGTH_LONG).show()
                     navigateToHomePage()
-                    authViewModel.authResult.value = null
                 } else {
                     Toast.makeText(
                         requireContext(),
-                        it.exceptionOrNull()?.message,
+                        result.exceptionOrNull()?.message,
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -63,7 +62,7 @@ class SignInFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
-                    authViewModel.signIn(email, password)
+                    signInViewModel.signIn(email, password)
                 }
             }
             createAccount.setOnClickListener {
@@ -71,7 +70,7 @@ class SignInFragment : Fragment() {
                 findNavController().navigate(action)
             }
         }
-        val currentUser = authViewModel.getCurrentUser()
+        val currentUser = signInViewModel.getCurrentUser()
         if (currentUser != null) {
             navigateToHomePage()
         }

@@ -12,9 +12,10 @@ import com.example.capstoneproject.databinding.ListItemBinding
 import com.example.capstoneproject.model.DataModel
 import com.example.capstoneproject.ui.list.ListViewModel
 
-class MoviesAdapter(private val viewModel: ListViewModel) : ListAdapter<DataModel, MoviesAdapter.Holder>(
-    DiffCallback()
-) {
+class MoviesAdapter(private val viewModel: ListViewModel) :
+    ListAdapter<DataModel, MoviesAdapter.Holder>(
+        DiffCallback()
+    ) {
 
     var onClick: ((DataModel) -> Unit)? = null
 
