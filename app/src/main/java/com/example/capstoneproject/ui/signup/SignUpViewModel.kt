@@ -8,8 +8,8 @@ import com.example.capstoneproject.data.repository.FirebaseAuthRepository
 import kotlinx.coroutines.launch
 
 class SignUpViewModel : ViewModel() {
-    private val authRepository = FirebaseAuthRepository()
 
+    private val authRepository = FirebaseAuthRepository()
     val authResult = MutableLiveData<Event<Result<String>?>>()
 
     fun signUp(name: String, surname: String, email: String, password: String) {

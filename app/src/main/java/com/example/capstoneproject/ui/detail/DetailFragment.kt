@@ -7,26 +7,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.capstoneproject.R
 import com.example.capstoneproject.databinding.FragmentDetailBinding
-import com.example.capstoneproject.ui.list.ListViewModel
+import com.example.capstoneproject.ui.favorite.FavoriteViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 class DetailFragment : Fragment() {
 
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
     private val args by navArgs<DetailFragmentArgs>()
-    private val viewModel: ListViewModel by activityViewModels()
+    private val favoriteViewModel: FavoriteViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -34,10 +33,17 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupViews()
+        observerData()
+    }
+
+    private fun setupViews() {
         with(binding) {
-            Glide.with(view.context).apply {
-                load(args.data.bigImage).into(imageBig)
-                load(args.data.image).override(500, 500).into(image)
+            view?.let {
+                Glide.with(it.context).apply {
+                    load(args.data.bigImage).into(imageBig)
+                    load(args.data.image).override(500, 500).into(image)
+                }
             }
             title.text = args.data.title
             val genreList = args.data.genre
@@ -49,11 +55,15 @@ class DetailFragment : Fragment() {
             rating.text = args.data.rating
             description.text = args.data.description
 
-            updateFavButton(args.data.imdbId)
-
             favButton.setOnClickListener {
-               // viewModel.toggleFavorite(args.data)
-
+                FirebaseAuth.getInstance().currentUser?.uid?.let { userId ->
+                    args.data.imdbId?.let { imdbId ->
+                        favoriteViewModel.toggleFavorite(
+                            userId,
+                            imdbId
+                        )
+                    }
+                }
             }
 
             backHome.setOnClickListener {
@@ -63,24 +73,24 @@ class DetailFragment : Fragment() {
             imdbLink.setOnClickListener {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(args.data.imdbLink)))
             }
-
-            observerData()
         }
     }
 
-    fun observerData(){
-        viewModel.favorites.observe(viewLifecycleOwner, Observer { favorites ->
-            updateFavButton(args.data.imdbId)
-        })
+    private fun observerData() {
+        FirebaseAuth.getInstance().currentUser?.uid?.let { userId ->
+            favoriteViewModel.loadFavorites(userId)
+
+            favoriteViewModel.favoriteIds.observe(viewLifecycleOwner) { favorites ->
+                val isFavorited = args.data.imdbId?.let { favorites.contains(it) } ?: false
+                updateFavButton(isFavorited)
+            }
+        }
     }
 
-    private fun updateFavButton(itemId: String?) {
-        itemId?.let {
-            val isFavorited = viewModel.favorites.value?.any { it.imdbId == itemId } ?: false
-            binding.favButton.setBackgroundResource(
-                if (isFavorited) R.drawable.popcorn else R.drawable.popcorn_border
-            )
-        }
+    private fun updateFavButton(isFavorited: Boolean) {
+        binding.favButton.setBackgroundResource(
+            if (isFavorited) R.drawable.popcorn else R.drawable.popcorn_border
+        )
     }
 
     override fun onDestroyView() {

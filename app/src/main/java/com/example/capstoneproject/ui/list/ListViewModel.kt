@@ -3,41 +3,22 @@ package com.example.capstoneproject.ui.list
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.capstoneproject.model.DataModel
-import com.example.capstoneproject.data.repository.FirebaseFavoriteRepository
 import com.example.capstoneproject.data.repository.MoviesRepository
+import com.example.capstoneproject.model.DataModel
 import com.example.capstoneproject.data.repository.MoviesRepositoryImpl
 import com.example.capstoneproject.model.Type
-import com.example.capstoneproject.network.IMDbMoviesAPI
-import com.example.capstoneproject.network.IMDbMoviesAPIService
-import com.example.capstoneproject.network.response.toDataModel
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
-class ListViewModel() : ViewModel() {
-
+class ListViewModel :
+    ViewModel() {
+    private val moviesRepository: MoviesRepository = MoviesRepositoryImpl()
     val movies = MutableLiveData<List<DataModel>>()
     val series = MutableLiveData<List<DataModel>>()
-    val favorites = MutableLiveData<List<DataModel>>()
-    val error = MutableLiveData<String>()
-    val moviesRepository: MoviesRepository = MoviesRepositoryImpl()
-
-    private val firestore = FirebaseFavoriteRepository()
-    private val auth = FirebaseAuth.getInstance()
+    val isLoading = MutableLiveData<Boolean>()
+    val filteredItems = MutableLiveData<List<DataModel>>()
 
     private val moviesList = mutableListOf<DataModel>()
     private val seriesList = mutableListOf<DataModel>()
-
-    init {
-        auth.addAuthStateListener { auth ->
-            val user = auth.currentUser
-            user?.uid?.let {
-                viewModelScope.launch {
-                    loadFavorites(it)
-                }
-            }
-        }
-    }
 
     fun fetchData(type: Type) {
         when (type) {
@@ -46,67 +27,56 @@ class ListViewModel() : ViewModel() {
         }
     }
 
-    fun getMovies() {
-        if (movies.value.isNullOrEmpty()) {
-            viewModelScope.launch {
+    private fun getMovies() {
+        isLoading.value = true
+        viewModelScope.launch {
+            try {
+                val result = moviesRepository.getMovies()
                 moviesList.clear()
-                moviesList.addAll(moviesRepository.getMovies())
-                val user = auth.currentUser
-                user?.uid?.let {
-                    loadFavorites(it)
-                }
+                moviesList.addAll(result)
                 movies.value = moviesList
+            } catch (e: Exception) {
+
+            } finally {
+                isLoading.value = false
             }
         }
     }
 
-    fun getSeries() {
-        if (series.value.isNullOrEmpty()) {
-            viewModelScope.launch {
+    private fun getSeries() {
+        isLoading.value = true
+        viewModelScope.launch {
+            try {
+                val result = moviesRepository.getSeries()
                 seriesList.clear()
-                seriesList.addAll(moviesRepository.getSeries())
-                val user = auth.currentUser
-                user?.uid?.let {
-                    loadFavorites(it)
-                }
+                seriesList.addAll(result)
                 series.value = seriesList
+            } catch (e: Exception) {
+
+            } finally {
+                isLoading.value = false
             }
         }
     }
 
-    fun toggleFavorite(dataModel: DataModel) {
-        val user = auth.currentUser
-        user?.let {
-            viewModelScope.launch {
-                try {
-                    val isFavorited = dataModel.imdbId?.let { imdbId ->
-                        firestore.isFavorite(user.uid, imdbId)
-                    } ?: false
-
-                    dataModel.imdbId?.let { imdbId ->
-                        if (isFavorited) {
-                            firestore.removeFavorite(user.uid, imdbId)
-                        } else {
-                            firestore.addFavorite(user.uid, imdbId)
-                        }
-                    }
-                    loadFavorites(user.uid)
-                } catch (e: Exception) {
-                    error.value = e.message
-                }
-            }
+    fun updateMoviesWithFavorites(favoriteIds: Set<String>) {
+        movies.value = movies.value?.map { movie ->
+            movie.copy(isFavorite = favoriteIds.contains(movie.imdbId))
         }
     }
 
-    private suspend fun loadFavorites(userId: String) {
-        try {
-            val favoriteIds = firestore.getFavoriteIds(userId)
-            val combinedList = moviesList + seriesList
-            val favoriteList = combinedList.filter { it.imdbId in favoriteIds }
-            favorites.value = favoriteList
-        } catch (e: Exception) {
-            error.value = e.message
+    fun updateSeriesWithFavorites(favoriteIds: Set<String>) {
+        series.value = series.value?.map { series ->
+            series.copy(isFavorite = favoriteIds.contains(series.imdbId))
         }
+    }
+
+    fun searchItems(query: String) {
+        val combinedList = (movies.value ?: emptyList()) + (series.value ?: emptyList())
+        val filteredList = combinedList.filter {
+            it.title?.contains(query, ignoreCase = true) ?: false
+        }
+        filteredItems.value = filteredList
     }
 }
 

@@ -3,9 +3,10 @@ package com.example.capstoneproject.data.repository
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
-class FirebaseFavoriteRepository {
+class FirebaseFavoriteRepository  {
     private val firestore = FirebaseFirestore.getInstance()
 
+    // Favori ekleme
     suspend fun addFavorite(userId: String, imdbId: String) {
         val favoriteRef = firestore.collection("users").document(userId)
             .collection("favorites").document(imdbId)
@@ -13,6 +14,7 @@ class FirebaseFavoriteRepository {
         favoriteRef.set(mapOf("itemId" to imdbId)).await()
     }
 
+    // Favori kaldırma
     suspend fun removeFavorite(userId: String, imdbId: String) {
         val favoriteRef = firestore.collection("users").document(userId)
             .collection("favorites").document(imdbId)
@@ -20,6 +22,7 @@ class FirebaseFavoriteRepository {
         favoriteRef.delete().await()
     }
 
+    // Favori durumu kontrol etme
     suspend fun isFavorite(userId: String, imdbId: String): Boolean {
         val favoriteRef = firestore.collection("users").document(userId)
             .collection("favorites").document(imdbId)
@@ -32,6 +35,7 @@ class FirebaseFavoriteRepository {
         }
     }
 
+    // Tüm favori öğelerinin IMDb ID'lerini getirme
     suspend fun getFavoriteIds(userId: String): Set<String> {
         return try {
             val result = firestore.collection("users").document(userId)

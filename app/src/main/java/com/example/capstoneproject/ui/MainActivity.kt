@@ -33,7 +33,9 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.signUpFragment, R.id.signInFragment -> binding.bottomNavigation.visibility = View.GONE
+                R.id.signUpFragment, R.id.signInFragment -> binding.bottomNavigation.visibility =
+                    View.GONE
+
                 else -> binding.bottomNavigation.visibility = View.VISIBLE
             }
         }
@@ -44,6 +46,7 @@ class MainActivity : AppCompatActivity() {
                     signOut()
                     true
                 }
+
                 else -> {
                     navController.navigate(item.itemId)
                     true
@@ -51,6 +54,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun signOut() {
         authRepository.signOut()
         Toast.makeText(this, "Logout successful", Toast.LENGTH_LONG).show()

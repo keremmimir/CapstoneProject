@@ -2,6 +2,7 @@ package com.example.capstoneproject.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,13 +12,16 @@ import com.example.capstoneproject.R
 import com.example.capstoneproject.databinding.ListItemBinding
 import com.example.capstoneproject.model.DataModel
 import com.example.capstoneproject.ui.list.ListViewModel
+import kotlinx.coroutines.Job
 
-class MoviesAdapter(private val viewModel: ListViewModel) :
+class MoviesAdapter(
+    private val onFavoriteToggle: (DataModel) -> Unit,
+    private val isFavorite: (String) -> Boolean,
+    private val onDetailToggle: (DataModel) -> Unit
+) :
     ListAdapter<DataModel, MoviesAdapter.Holder>(
         DiffCallback()
     ) {
-
-    var onClick: ((DataModel) -> Unit)? = null
 
     inner class Holder(val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(dataModel: DataModel) {
@@ -41,23 +45,20 @@ class MoviesAdapter(private val viewModel: ListViewModel) :
                 updateFavButton(dataModel.imdbId)
 
                 favButton.setOnClickListener {
-                    viewModel.toggleFavorite(dataModel)
+                    onFavoriteToggle(dataModel)
                     notifyItemChanged(adapterPosition)
                 }
             }
 
             itemView.setOnClickListener {
-                onClick?.invoke(dataModel)
+                onDetailToggle(dataModel)
             }
         }
 
         private fun updateFavButton(itemId: String?) {
-            itemId?.let {
-                val isFavorited = viewModel.favorites.value?.any { it.imdbId == itemId } ?: false
-                binding.favButton.setBackgroundResource(
-                    if (isFavorited) R.drawable.popcorn else R.drawable.popcorn_border
-                )
-            }
+            binding.favButton.setBackgroundResource(
+                if (itemId?.let { isFavorite(it) } == true) R.drawable.popcorn else R.drawable.popcorn_border
+            )
         }
     }
 
@@ -70,7 +71,6 @@ class MoviesAdapter(private val viewModel: ListViewModel) :
         holder.bind(getItem(position))
     }
 
-    // DiffUtil ItemCallback
     class DiffCallback : DiffUtil.ItemCallback<DataModel>() {
         override fun areItemsTheSame(oldItem: DataModel, newItem: DataModel): Boolean {
             return oldItem.imdbId == newItem.imdbId

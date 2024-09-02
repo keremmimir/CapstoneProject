@@ -1,4 +1,4 @@
-package com.example.capstoneproject.ui.list
+package com.example.capstoneproject.ui.favorite
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,39 +7,32 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.capstoneproject.ui.adapter.MoviesAdapter
-import com.example.capstoneproject.databinding.FragmentListBinding
-import com.example.capstoneproject.model.Type
-import com.example.capstoneproject.ui.favorite.FavoriteViewModel
+import com.example.capstoneproject.databinding.FragmentFavoriteBinding
 import com.google.firebase.auth.FirebaseAuth
 
-class ListFragment : Fragment() {
+class FavoriteListFragment : Fragment() {
 
-    private var _binding: FragmentListBinding? = null
+    private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
-    private val listViewModel: ListViewModel by viewModels()
-    private val favoriteViewModel: FavoriteViewModel by viewModels()
     private lateinit var adapter: MoviesAdapter
-    private val args by navArgs<ListFragmentArgs>()
-    private lateinit var type: Type
+    private val favoriteListViewModel: FavoriteListViewModel by viewModels()
+    private val favoriteViewModel: FavoriteViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentListBinding.inflate(inflater, container, false)
+        _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        type = args.type
-        setupViews()
         observeData()
-        listViewModel.fetchData(type)
+        setupViews()
     }
 
     private fun setupViews() {
@@ -58,11 +51,13 @@ class ListFragment : Fragment() {
                 favoriteViewModel.favoriteIds.value?.contains(imdbId) ?: false
             },
             onDetailToggle = { dataModel ->
-                val action = ListFragmentDirections.actionListFragmentToDetailFragment(dataModel)
+                val action =
+                    FavoriteListFragmentDirections.actionFavoriteFragmentToDetailFragment(dataModel)
                 findNavController().navigate(action)
             }
         )
-        binding.recylerView.adapter = adapter
+
+        binding.FavRecylerView.adapter = adapter
 
         binding.backHome.setOnClickListener {
             findNavController().navigateUp()
@@ -75,37 +70,26 @@ class ListFragment : Fragment() {
             favoriteViewModel.loadFavorites(userId)
 
             favoriteViewModel.favoriteIds.observe(viewLifecycleOwner) { favoriteIds ->
-                listViewModel.updateMoviesWithFavorites(favoriteIds)
-                listViewModel.updateSeriesWithFavorites(favoriteIds)
+                favoriteListViewModel.loadFavorites(favoriteIds)
             }
 
-            listViewModel.filteredItems.observe(viewLifecycleOwner) { filteredItems ->
+            favoriteListViewModel.favoriteDataModels.observe(viewLifecycleOwner) { favoriteMovies ->
+                adapter.submitList(favoriteMovies)
+            }
+
+            favoriteListViewModel.filteredItems.observe(viewLifecycleOwner) { filteredItems ->
                 adapter.submitList(filteredItems)
             }
 
-            when (type) {
-                Type.MOVIES -> {
-                    listViewModel.movies.observe(viewLifecycleOwner, Observer { movies ->
-                        adapter.submitList(movies)
-                    })
-                }
-
-                Type.SERIES -> {
-                    listViewModel.series.observe(viewLifecycleOwner, Observer { series ->
-                        adapter.submitList(series)
-                    })
-                }
-            }
-
             with(binding) {
-                listViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+                favoriteListViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
                     progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
                     if (isLoading) {
                         progressBar.playAnimation()
-                        recylerView.visibility = View.GONE
+                        FavRecylerView.visibility = View.GONE
                     } else {
                         progressBar.pauseAnimation()
-                        recylerView.visibility = View.VISIBLE
+                        FavRecylerView.visibility = View.VISIBLE
                     }
                 }
             }
@@ -121,7 +105,7 @@ class ListFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 newText?.let {
-                    listViewModel.searchItems(it)
+                    favoriteListViewModel.searchItems(it)
                 }
                 return true
             }
@@ -133,3 +117,4 @@ class ListFragment : Fragment() {
         _binding = null
     }
 }
+

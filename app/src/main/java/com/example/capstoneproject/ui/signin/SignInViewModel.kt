@@ -9,8 +9,8 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 
 class SignInViewModel : ViewModel() {
-    private val authRepository = FirebaseAuthRepository()
 
+    private val authRepository = FirebaseAuthRepository()
     val authResult = MutableLiveData<Event<Result<String>?>>()
 
     fun signIn(email: String, password: String) {
