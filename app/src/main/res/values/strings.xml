@@ -24,4 +24,8 @@
     <string name="sign_in_empty">Email and Password cannot be empty</string>
     <string name="sign_up_empty">Name, surname, email, and password cannot be empty</string>
     <string name="popzone">PopZone</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="welcome_popzone">Welcome PopZone</string>
+    <string name="info">Find the best 100 films and series in our app. Save your favorites and access IMDb for more information.</string>
 </resources>

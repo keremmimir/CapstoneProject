@@ -1,5 +1,6 @@
 package com.example.capstoneproject.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -33,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.signUpFragment, R.id.signInFragment -> binding.bottomNavigation.visibility =
+                R.id.signUpFragment, R.id.signInFragment,R.id.firstFragment -> binding.bottomNavigation.visibility =
                     View.GONE
 
                 else -> binding.bottomNavigation.visibility = View.VISIBLE
