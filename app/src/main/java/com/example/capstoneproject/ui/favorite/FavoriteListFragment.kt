@@ -6,11 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.capstoneproject.constants.Constants
 import com.example.capstoneproject.ui.adapter.MoviesAdapter
 import com.example.capstoneproject.databinding.FragmentFavoriteBinding
-import com.google.firebase.auth.FirebaseAuth
 
 class FavoriteListFragment : Fragment() {
 
@@ -18,7 +19,6 @@ class FavoriteListFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var adapter: MoviesAdapter
     private val favoriteListViewModel: FavoriteListViewModel by viewModels()
-    private val favoriteViewModel: FavoriteViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,17 +38,11 @@ class FavoriteListFragment : Fragment() {
     private fun setupViews() {
         adapter = MoviesAdapter(
             onFavoriteToggle = { dataModel ->
-                FirebaseAuth.getInstance().currentUser?.uid?.let { userId ->
-                    dataModel.imdbId?.let { imdbId ->
-                        favoriteViewModel.toggleFavorite(
-                            userId,
-                            imdbId
-                        )
-                    }
+                dataModel.imdbId?.let { imdbId ->
+                    favoriteListViewModel.toggleFavorite(
+                        imdbId
+                    )
                 }
-            },
-            isFavorite = { imdbId ->
-                favoriteViewModel.favoriteIds.value?.contains(imdbId) ?: false
             },
             onDetailToggle = { dataModel ->
                 val action =
@@ -62,38 +56,41 @@ class FavoriteListFragment : Fragment() {
         binding.backHome.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        setFragmentResultListener(Constants.SET_FRAGMENT_RESULT) { _, bundle ->
+            val imdbId = bundle.getString(Constants.FRAGMENT_RESULT_IMDB_ID)
+            val isFavorite = bundle.getBoolean(Constants.FRAGMENT_RESULT_IS_FAVORITE)
+            imdbId?.let { id ->
+                favoriteListViewModel.updateFavoriteStatus(id, isFavorite)
+            }
+        }
+
         searchBox()
     }
 
     private fun observeData() {
-        FirebaseAuth.getInstance().currentUser?.uid?.let { userId ->
-            favoriteViewModel.loadFavorites(userId)
 
-            favoriteViewModel.favoriteIds.observe(viewLifecycleOwner) { favoriteIds ->
-                favoriteListViewModel.loadFavorites(favoriteIds)
-            }
+        favoriteListViewModel.favoriteDataModels.observe(viewLifecycleOwner) { favoriteMovies ->
+            adapter.submitList(favoriteMovies)
+        }
 
-            favoriteListViewModel.favoriteDataModels.observe(viewLifecycleOwner) { favoriteMovies ->
-                adapter.submitList(favoriteMovies)
-            }
+        favoriteListViewModel.filteredItems.observe(viewLifecycleOwner) { filteredItems ->
+            adapter.submitList(filteredItems)
+        }
 
-            favoriteListViewModel.filteredItems.observe(viewLifecycleOwner) { filteredItems ->
-                adapter.submitList(filteredItems)
-            }
-
-            with(binding) {
-                favoriteListViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-                    progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-                    if (isLoading) {
-                        progressBar.playAnimation()
-                        FavRecylerView.visibility = View.GONE
-                    } else {
-                        progressBar.pauseAnimation()
-                        FavRecylerView.visibility = View.VISIBLE
-                    }
+        with(binding) {
+            favoriteListViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+                progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+                if (isLoading) {
+                    progressBar.playAnimation()
+                    FavRecylerView.visibility = View.GONE
+                } else {
+                    progressBar.pauseAnimation()
+                    FavRecylerView.visibility = View.VISIBLE
                 }
             }
         }
+
     }
 
     private fun searchBox() {

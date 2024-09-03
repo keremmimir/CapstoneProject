@@ -9,19 +9,21 @@ class MoviesRepositoryImpl : MoviesRepository {
 
     private val imdbMoviesAPI: IMDbMoviesAPI = IMDbMoviesAPIService.getIMDbAPI()
 
-    override suspend fun getMovies(): List<DataModel> {
+    override suspend fun getMovies(): Result<List<DataModel>> {
         return try {
-            imdbMoviesAPI.getMovies().map { it.toDataModel() }
+            val movies = imdbMoviesAPI.getMovies().map { it.toDataModel() }
+            Result.success(movies)
         } catch (e: Exception) {
-            emptyList()
+            Result.failure(e)
         }
     }
 
-    override suspend fun getSeries(): List<DataModel> {
+    override suspend fun getSeries(): Result<List<DataModel>> {
         return try {
-            imdbMoviesAPI.getSeries().map { it.toDataModel() }
+            val series = imdbMoviesAPI.getSeries().map { it.toDataModel() }
+            Result.success(series)
         } catch (e: Exception) {
-            emptyList()
+            Result.failure(e)
         }
     }
 }

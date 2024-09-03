@@ -13,7 +13,6 @@ import androidx.navigation.fragment.navArgs
 import com.example.capstoneproject.ui.adapter.MoviesAdapter
 import com.example.capstoneproject.databinding.FragmentListBinding
 import com.example.capstoneproject.model.Type
-import com.example.capstoneproject.ui.favorite.FavoriteViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 class ListFragment : Fragment() {
@@ -21,7 +20,6 @@ class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
     private val listViewModel: ListViewModel by viewModels()
-    private val favoriteViewModel: FavoriteViewModel by viewModels()
     private lateinit var adapter: MoviesAdapter
     private val args by navArgs<ListFragmentArgs>()
     private lateinit var type: Type
@@ -47,15 +45,11 @@ class ListFragment : Fragment() {
             onFavoriteToggle = { dataModel ->
                 FirebaseAuth.getInstance().currentUser?.uid?.let { userId ->
                     dataModel.imdbId?.let { imdbId ->
-                        favoriteViewModel.toggleFavorite(
-                            userId,
+                        listViewModel.toggleFavorite(
                             imdbId
                         )
                     }
                 }
-            },
-            isFavorite = { imdbId ->
-                favoriteViewModel.favoriteIds.value?.contains(imdbId) ?: false
             },
             onDetailToggle = { dataModel ->
                 val action = ListFragmentDirections.actionListFragmentToDetailFragment(dataModel)
@@ -71,42 +65,23 @@ class ListFragment : Fragment() {
     }
 
     private fun observeData() {
-        FirebaseAuth.getInstance().currentUser?.uid?.let { userId ->
-            favoriteViewModel.loadFavorites(userId)
+        listViewModel.filteredItems.observe(viewLifecycleOwner) { filteredItems ->
+            adapter.submitList(filteredItems)
+        }
 
-            favoriteViewModel.favoriteIds.observe(viewLifecycleOwner) { favoriteIds ->
-                listViewModel.updateMoviesWithFavorites(favoriteIds)
-                listViewModel.updateSeriesWithFavorites(favoriteIds)
-            }
+        listViewModel.movies.observe(viewLifecycleOwner, Observer { movies ->
+            adapter.submitList(movies)
+        })
 
-            listViewModel.filteredItems.observe(viewLifecycleOwner) { filteredItems ->
-                adapter.submitList(filteredItems)
-            }
-
-            when (type) {
-                Type.MOVIES -> {
-                    listViewModel.movies.observe(viewLifecycleOwner, Observer { movies ->
-                        adapter.submitList(movies)
-                    })
-                }
-
-                Type.SERIES -> {
-                    listViewModel.series.observe(viewLifecycleOwner, Observer { series ->
-                        adapter.submitList(series)
-                    })
-                }
-            }
-
-            with(binding) {
-                listViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-                    progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-                    if (isLoading) {
-                        progressBar.playAnimation()
-                        recylerView.visibility = View.GONE
-                    } else {
-                        progressBar.pauseAnimation()
-                        recylerView.visibility = View.VISIBLE
-                    }
+        with(binding) {
+            listViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+                progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+                if (isLoading) {
+                    progressBar.playAnimation()
+                    recylerView.visibility = View.GONE
+                } else {
+                    progressBar.pauseAnimation()
+                    recylerView.visibility = View.VISIBLE
                 }
             }
         }

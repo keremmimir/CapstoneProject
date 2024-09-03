@@ -15,9 +15,6 @@
         android:theme="@style/Base.Theme.CapstoneProject"
         tools:targetApi="31">
         <activity
-            android:name=".ui.FirstActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.SplashActivity"
             android:exported="true">
             <intent-filter>

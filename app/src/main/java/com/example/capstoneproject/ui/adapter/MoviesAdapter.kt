@@ -16,7 +16,6 @@ import kotlinx.coroutines.Job
 
 class MoviesAdapter(
     private val onFavoriteToggle: (DataModel) -> Unit,
-    private val isFavorite: (String) -> Boolean,
     private val onDetailToggle: (DataModel) -> Unit
 ) :
     ListAdapter<DataModel, MoviesAdapter.Holder>(
@@ -42,7 +41,7 @@ class MoviesAdapter(
                     .override(300, 300)
                     .into(image)
 
-                updateFavButton(dataModel.imdbId)
+                updateFavButton(dataModel.isFavorite)
 
                 favButton.setOnClickListener {
                     onFavoriteToggle(dataModel)
@@ -55,9 +54,9 @@ class MoviesAdapter(
             }
         }
 
-        private fun updateFavButton(itemId: String?) {
+        private fun updateFavButton(isFavorite: Boolean) {
             binding.favButton.setBackgroundResource(
-                if (itemId?.let { isFavorite(it) } == true) R.drawable.popcorn else R.drawable.popcorn_border
+                if (isFavorite) R.drawable.popcorn else R.drawable.popcorn_border
             )
         }
     }

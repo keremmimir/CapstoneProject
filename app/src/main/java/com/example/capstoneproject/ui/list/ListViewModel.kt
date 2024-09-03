@@ -1,8 +1,11 @@
 package com.example.capstoneproject.ui.list
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.capstoneproject.data.repository.FirebaseAuthRepository
+import com.example.capstoneproject.data.repository.FirebaseFavoriteRepository
 import com.example.capstoneproject.data.repository.MoviesRepository
 import com.example.capstoneproject.model.DataModel
 import com.example.capstoneproject.data.repository.MoviesRepositoryImpl
@@ -12,13 +15,14 @@ import kotlinx.coroutines.launch
 class ListViewModel :
     ViewModel() {
     private val moviesRepository: MoviesRepository = MoviesRepositoryImpl()
+    private val favoriteRepository = FirebaseFavoriteRepository()
+    private val authRepository = FirebaseAuthRepository()
+    private val userId = authRepository.getCurrentUser()?.uid
+
     val movies = MutableLiveData<List<DataModel>>()
-    val series = MutableLiveData<List<DataModel>>()
     val isLoading = MutableLiveData<Boolean>()
     val filteredItems = MutableLiveData<List<DataModel>>()
 
-    private val moviesList = mutableListOf<DataModel>()
-    private val seriesList = mutableListOf<DataModel>()
 
     fun fetchData(type: Type) {
         when (type) {
@@ -30,53 +34,94 @@ class ListViewModel :
     private fun getMovies() {
         isLoading.value = true
         viewModelScope.launch {
-            try {
-                val result = moviesRepository.getMovies()
-                moviesList.clear()
-                moviesList.addAll(result)
-                movies.value = moviesList
-            } catch (e: Exception) {
+            val result = moviesRepository.getMovies()
+            when {
+                result.isSuccess -> {
+                    result.getOrNull()?.let { updateMoviesWithFavorites(it) }
+                }
 
-            } finally {
-                isLoading.value = false
+                result.isFailure -> {
+                    Log.e("getMovies", "Error ${result.getOrNull()}")
+                }
             }
+            isLoading.value = false
         }
     }
 
     private fun getSeries() {
         isLoading.value = true
         viewModelScope.launch {
-            try {
-                val result = moviesRepository.getSeries()
-                seriesList.clear()
-                seriesList.addAll(result)
-                series.value = seriesList
-            } catch (e: Exception) {
+            val result = moviesRepository.getSeries()
+            when {
+                result.isSuccess -> {
+                    result.getOrNull()?.let { updateMoviesWithFavorites(it) }
+                }
 
-            } finally {
-                isLoading.value = false
+                result.isFailure -> {
+                    Log.e("getMovies", "Error ${result.getOrNull()}")
+                }
+            }
+            isLoading.value = false
+        }
+    }
+
+    private fun updateMoviesWithFavorites(list: List<DataModel>) {
+        viewModelScope.launch {
+            val favoriteIds = userId?.let { favoriteRepository.getFavoriteIds(it) } ?: emptyList()
+            movies.value = list.map { movie ->
+                movie.copy(isFavorite = favoriteIds.contains(movie.imdbId))
             }
         }
     }
 
-    fun updateMoviesWithFavorites(favoriteIds: Set<String>) {
-        movies.value = movies.value?.map { movie ->
-            movie.copy(isFavorite = favoriteIds.contains(movie.imdbId))
-        }
-    }
-
-    fun updateSeriesWithFavorites(favoriteIds: Set<String>) {
-        series.value = series.value?.map { series ->
-            series.copy(isFavorite = favoriteIds.contains(series.imdbId))
-        }
-    }
-
     fun searchItems(query: String) {
-        val combinedList = (movies.value ?: emptyList()) + (series.value ?: emptyList())
-        val filteredList = combinedList.filter {
+        val filteredList = movies.value?.filter {
             it.title?.contains(query, ignoreCase = true) ?: false
         }
         filteredItems.value = filteredList
+    }
+
+    private fun addFavorite(userId: String, imdbId: String) {
+        viewModelScope.launch {
+            favoriteRepository.addFavorite(userId, imdbId)
+            movies.value = movies.value?.map {
+                if (it.imdbId == imdbId) {
+                    it.copy(isFavorite = true)
+                } else {
+                    it
+                }
+            }
+        }
+    }
+
+    private fun removeFavorite(userId: String, imdbId: String) {
+        viewModelScope.launch {
+            favoriteRepository.removeFavorite(userId, imdbId)
+            movies.value = movies.value?.map {
+                if (it.imdbId == imdbId) {
+                    it.copy(isFavorite = false)
+                } else {
+                    it
+                }
+            }
+        }
+    }
+
+    fun toggleFavorite(imdbId: String) {
+        userId?.let { id ->
+            viewModelScope.launch {
+                val isFav = isFavorite(userId, imdbId)
+                if (isFav) {
+                    removeFavorite(id, imdbId)
+                } else {
+                    addFavorite(userId, imdbId)
+                }
+            }
+        }
+    }
+
+    suspend fun isFavorite(userId: String, imdbId: String): Boolean {
+        return favoriteRepository.isFavorite(userId, imdbId)
     }
 }
 

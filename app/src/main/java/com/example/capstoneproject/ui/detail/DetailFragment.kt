@@ -7,21 +7,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.capstoneproject.R
+import com.example.capstoneproject.constants.Constants
 import com.example.capstoneproject.databinding.FragmentDetailBinding
-import com.example.capstoneproject.ui.favorite.FavoriteViewModel
-import com.google.firebase.auth.FirebaseAuth
 
 class DetailFragment : Fragment() {
 
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
     private val args by navArgs<DetailFragmentArgs>()
-    private val favoriteViewModel: FavoriteViewModel by viewModels()
+    private val detailViewModel: DetailViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -56,13 +56,12 @@ class DetailFragment : Fragment() {
             description.text = args.data.description
 
             favButton.setOnClickListener {
-                FirebaseAuth.getInstance().currentUser?.uid?.let { userId ->
-                    args.data.imdbId?.let { imdbId ->
-                        favoriteViewModel.toggleFavorite(
-                            userId,
-                            imdbId
-                        )
-                    }
+                args.data.imdbId?.let { imdbId ->
+                    detailViewModel.toggleFavorite(imdbId)
+                    setFragmentResult(Constants.SET_FRAGMENT_RESULT, Bundle().apply {
+                        putString(Constants.FRAGMENT_RESULT_IMDB_ID, imdbId)
+                        putBoolean(Constants.FRAGMENT_RESULT_IS_FAVORITE, !args.data.isFavorite)
+                    })
                 }
             }
 
@@ -74,16 +73,12 @@ class DetailFragment : Fragment() {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(args.data.imdbLink)))
             }
         }
+        detailViewModel.setInitialFavorite(args.data.isFavorite)
     }
 
     private fun observerData() {
-        FirebaseAuth.getInstance().currentUser?.uid?.let { userId ->
-            favoriteViewModel.loadFavorites(userId)
-
-            favoriteViewModel.favoriteIds.observe(viewLifecycleOwner) { favorites ->
-                val isFavorited = args.data.imdbId?.let { favorites.contains(it) } ?: false
-                updateFavButton(isFavorited)
-            }
+        detailViewModel.isFavorite.observe(viewLifecycleOwner) {
+            updateFavButton(it)
         }
     }
 
