@@ -50,6 +50,12 @@ class SignUpFragment : Fragment() {
                 }
             }
         })
+
+        signUpViewModel.error.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { message ->
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun setupViews() {

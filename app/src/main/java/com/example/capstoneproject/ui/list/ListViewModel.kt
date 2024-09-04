@@ -1,9 +1,9 @@
 package com.example.capstoneproject.ui.list
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.capstoneproject.Event
 import com.example.capstoneproject.data.repository.FirebaseAuthRepository
 import com.example.capstoneproject.data.repository.FirebaseFavoriteRepository
 import com.example.capstoneproject.model.DataModel
@@ -25,6 +25,7 @@ class ListViewModel @Inject constructor(
     val movies = MutableLiveData<List<DataModel>>()
     val isLoading = MutableLiveData<Boolean>()
     val filteredItems = MutableLiveData<List<DataModel>>()
+    val error = MutableLiveData<Event<String>>()
 
 
     fun fetchData(type: Type) {
@@ -37,42 +38,49 @@ class ListViewModel @Inject constructor(
     private fun getMovies() {
         isLoading.value = true
         viewModelScope.launch {
-            val result = moviesRepository.getMovies()
-            when {
-                result.isSuccess -> {
+            try {
+                val result = moviesRepository.getMovies()
+                if (result.isSuccess) {
                     result.getOrNull()?.let { updateMoviesWithFavorites(it) }
+                } else {
+                    error.value = Event(result.exceptionOrNull()?.message ?: "Error")
                 }
-
-                result.isFailure -> {
-                    Log.e("getMovies", "Error ${result.getOrNull()}")
-                }
+            } catch (e: Exception) {
+                error.value = Event(e.message ?: "Error")
+            } finally {
+                isLoading.value = false
             }
-            isLoading.value = false
         }
     }
 
     private fun getSeries() {
         isLoading.value = true
         viewModelScope.launch {
-            val result = moviesRepository.getSeries()
-            when {
-                result.isSuccess -> {
+            try {
+                val result = moviesRepository.getSeries()
+                if (result.isSuccess) {
                     result.getOrNull()?.let { updateMoviesWithFavorites(it) }
+                } else {
+                    error.value = Event(result.exceptionOrNull()?.message ?: "Error")
                 }
-
-                result.isFailure -> {
-                    Log.e("getMovies", "Error ${result.getOrNull()}")
-                }
+            } catch (e: Exception) {
+                error.value = Event(e.message ?: "Error")
+            } finally {
+                isLoading.value = false
             }
-            isLoading.value = false
         }
     }
 
     private fun updateMoviesWithFavorites(list: List<DataModel>) {
         viewModelScope.launch {
-            val favoriteIds = userId?.let { favoriteRepository.getFavoriteIds(it) } ?: emptyList()
-            movies.value = list.map { movie ->
-                movie.copy(isFavorite = favoriteIds.contains(movie.imdbId))
+            try {
+                val favoriteIds =
+                    userId?.let { favoriteRepository.getFavoriteIds(it) } ?: emptyList()
+                movies.value = list.map { movie ->
+                    movie.copy(isFavorite = favoriteIds.contains(movie.imdbId))
+                }
+            } catch (e: Exception) {
+                error.value = Event(e.message ?: "Error")
             }
         }
     }
@@ -86,26 +94,34 @@ class ListViewModel @Inject constructor(
 
     private fun addFavorite(userId: String, imdbId: String) {
         viewModelScope.launch {
-            favoriteRepository.addFavorite(userId, imdbId)
-            movies.value = movies.value?.map {
-                if (it.imdbId == imdbId) {
-                    it.copy(isFavorite = true)
-                } else {
-                    it
+            try {
+                favoriteRepository.addFavorite(userId, imdbId)
+                movies.value = movies.value?.map {
+                    if (it.imdbId == imdbId) {
+                        it.copy(isFavorite = true)
+                    } else {
+                        it
+                    }
                 }
+            } catch (e: Exception) {
+                error.value = Event(e.message ?: "Error")
             }
         }
     }
 
     private fun removeFavorite(userId: String, imdbId: String) {
         viewModelScope.launch {
-            favoriteRepository.removeFavorite(userId, imdbId)
-            movies.value = movies.value?.map {
-                if (it.imdbId == imdbId) {
-                    it.copy(isFavorite = false)
-                } else {
-                    it
+            try {
+                favoriteRepository.removeFavorite(userId, imdbId)
+                movies.value = movies.value?.map {
+                    if (it.imdbId == imdbId) {
+                        it.copy(isFavorite = false)
+                    } else {
+                        it
+                    }
                 }
+            } catch (e: Exception) {
+                error.value = Event(e.message ?: "Error")
             }
         }
     }
@@ -113,18 +129,28 @@ class ListViewModel @Inject constructor(
     fun toggleFavorite(imdbId: String) {
         userId?.let { id ->
             viewModelScope.launch {
-                val isFav = isFavorite(userId, imdbId)
-                if (isFav) {
-                    removeFavorite(id, imdbId)
-                } else {
-                    addFavorite(userId, imdbId)
+                try {
+                    val isFav = isFavorite(id, imdbId)
+                    if (isFav) {
+                        removeFavorite(id, imdbId)
+                    } else {
+                        addFavorite(id, imdbId)
+                    }
+                } catch (e: Exception) {
+                    error.value = Event(e.message ?: "Error")
                 }
             }
         }
     }
 
     suspend fun isFavorite(userId: String, imdbId: String): Boolean {
-        return favoriteRepository.isFavorite(userId, imdbId)
+        return try {
+            favoriteRepository.isFavorite(userId, imdbId)
+        } catch (e: Exception) {
+            error.value = Event(e.message ?: "Error")
+            false
+        }
     }
 }
+
 

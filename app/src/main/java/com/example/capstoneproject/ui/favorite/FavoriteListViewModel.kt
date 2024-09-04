@@ -1,9 +1,9 @@
 package com.example.capstoneproject.ui.favorite
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.capstoneproject.Event
 import com.example.capstoneproject.data.repository.FirebaseAuthRepository
 import com.example.capstoneproject.data.repository.FirebaseFavoriteRepository
 import com.example.capstoneproject.data.repository.MoviesRepositoryImpl
@@ -17,12 +17,13 @@ class FavoriteListViewModel @Inject constructor(
     private val moviesRepository: MoviesRepositoryImpl,
     private val favoriteRepository: FirebaseFavoriteRepository,
     authRepository: FirebaseAuthRepository
-) :
-    ViewModel() {
+) : ViewModel() {
+
     private val userId = authRepository.getCurrentUser()?.uid
     val favoriteDataModels = MutableLiveData<List<DataModel>>()
     val isLoading = MutableLiveData<Boolean>()
     val filteredItems = MutableLiveData<List<DataModel>>()
+    val error = MutableLiveData<Event<String>>()
 
     init {
         loadFavorites()
@@ -45,7 +46,7 @@ class FavoriteListViewModel @Inject constructor(
                     allList.filter { it.imdbId in favoriteIds }.map { it.copy(isFavorite = true) }
                 favoriteDataModels.value = favoriteMovies
             } catch (e: Exception) {
-                Log.e("FavoriteListViewModel", "Error loading favorites", e)
+                error.value = Event(e.message ?: "Error")
             } finally {
                 isLoading.value = false
             }
@@ -71,36 +72,53 @@ class FavoriteListViewModel @Inject constructor(
 
     private fun removeFavorite(userId: String, imdbId: String) {
         viewModelScope.launch {
-            favoriteRepository.removeFavorite(userId, imdbId)
-            val newList = favoriteDataModels.value?.toMutableList()
-            newList?.removeIf {
-                it.imdbId == imdbId
+            try {
+                favoriteRepository.removeFavorite(userId, imdbId)
+                val newList = favoriteDataModels.value?.toMutableList()
+                newList?.removeIf {
+                    it.imdbId == imdbId
+                }
+                favoriteDataModels.value = newList
+            } catch (e: Exception) {
+                error.value = Event(e.message ?: "Error")
             }
-            favoriteDataModels.value = newList
         }
     }
 
     private fun addFavorite(userId: String, imdbId: String) {
         viewModelScope.launch {
-            favoriteRepository.addFavorite(userId, imdbId)
+            try {
+                favoriteRepository.addFavorite(userId, imdbId)
+            } catch (e: Exception) {
+                error.value = Event(e.message ?: "Error")
+            }
         }
     }
 
     fun toggleFavorite(imdbId: String) {
         userId?.let { id ->
             viewModelScope.launch {
-                val isFav = isFavorite(id, imdbId)
-                if (isFav) {
-                    removeFavorite(id, imdbId)
-                } else {
-                    addFavorite(id, imdbId)
+                try {
+                    val isFav = isFavorite(id, imdbId)
+                    if (isFav) {
+                        removeFavorite(id, imdbId)
+                    } else {
+                        addFavorite(id, imdbId)
+                    }
+                } catch (e: Exception) {
+                    error.value = Event(e.message ?: "Error")
                 }
             }
         }
     }
 
     suspend fun isFavorite(userId: String, imdbId: String): Boolean {
-        return favoriteRepository.isFavorite(userId, imdbId)
+        return try {
+            favoriteRepository.isFavorite(userId, imdbId)
+        } catch (e: Exception) {
+            error.value = Event(e.message ?: "Error")
+            false
+        }
     }
 
     fun searchItems(query: String) {

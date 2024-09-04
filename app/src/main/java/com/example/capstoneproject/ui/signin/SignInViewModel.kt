@@ -16,11 +16,20 @@ class SignInViewModel @Inject constructor(
 ) : ViewModel() {
 
     val authResult = MutableLiveData<Event<Result<String>?>>()
+    val error = MutableLiveData<Event<String>>()
 
     fun signIn(email: String, password: String) {
         viewModelScope.launch {
-            val result = authRepository.signIn(email, password)
-            authResult.value = Event(result)
+            try {
+                val result = authRepository.signIn(email, password)
+                if (result.isSuccess) {
+                    authResult.value = Event(result)
+                } else {
+                    error.value = Event(result.exceptionOrNull()?.message ?: "Error")
+                }
+            } catch (e: Exception) {
+                error.value = Event(e.message ?: "Error")
+            }
         }
     }
 

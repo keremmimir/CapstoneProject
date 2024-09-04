@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -73,11 +74,29 @@ class FavoriteListFragment : Fragment() {
     private fun observeData() {
 
         favoriteListViewModel.favoriteDataModels.observe(viewLifecycleOwner) { favoriteMovies ->
-            adapter.submitList(favoriteMovies)
+            if (favoriteMovies.isEmpty()) {
+                binding.emptyText.visibility = View.VISIBLE
+                adapter.submitList(emptyList())
+            } else {
+                binding.emptyText.visibility = View.GONE
+                adapter.submitList(favoriteMovies)
+            }
         }
 
         favoriteListViewModel.filteredItems.observe(viewLifecycleOwner) { filteredItems ->
-            adapter.submitList(filteredItems)
+            if (filteredItems.isEmpty()) {
+                binding.emptyText.visibility = View.VISIBLE
+                adapter.submitList(emptyList())
+            } else {
+                binding.emptyText.visibility = View.GONE
+                adapter.submitList(filteredItems)
+            }
+        }
+
+        favoriteListViewModel.error.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { message ->
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+            }
         }
 
         with(binding) {
@@ -92,7 +111,6 @@ class FavoriteListFragment : Fragment() {
                 }
             }
         }
-
     }
 
     private fun searchBox() {

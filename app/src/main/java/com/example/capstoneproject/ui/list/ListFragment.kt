@@ -5,9 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.capstoneproject.ui.adapter.MoviesAdapter
@@ -71,9 +71,15 @@ class ListFragment : Fragment() {
             adapter.submitList(filteredItems)
         }
 
-        listViewModel.movies.observe(viewLifecycleOwner, Observer { movies ->
+        listViewModel.movies.observe(viewLifecycleOwner) { movies ->
             adapter.submitList(movies)
-        })
+        }
+
+        listViewModel.error.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { message ->
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+            }
+        }
 
         with(binding) {
             listViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->

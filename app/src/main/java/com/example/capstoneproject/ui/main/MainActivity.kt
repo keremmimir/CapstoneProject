@@ -10,7 +10,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.capstoneproject.R
-import com.example.capstoneproject.constants.Constants
 import com.example.capstoneproject.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
