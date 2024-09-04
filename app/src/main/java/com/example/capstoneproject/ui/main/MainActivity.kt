@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.capstoneproject.R
+import com.example.capstoneproject.constants.Constants
 import com.example.capstoneproject.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.signInFragment -> {
-                    signOut()
+                    showSignOutConfirmationDialog()
                     true
                 }
 
@@ -55,9 +57,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun showSignOutConfirmationDialog() {
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.logout_title))
+            .setMessage(getString(R.string.logout_message))
+            .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
+                signOut()
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
     private fun signOut() {
         mainViewModel.signOut()
-        Toast.makeText(this, "Logout successful", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, getString(R.string.logout_successful), Toast.LENGTH_LONG).show()
         navController.navigate(R.id.signInFragment)
     }
 }

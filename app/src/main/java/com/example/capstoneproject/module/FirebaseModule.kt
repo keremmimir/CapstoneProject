@@ -1,7 +1,5 @@
 package com.example.capstoneproject.module
 
-import com.example.capstoneproject.data.repository.FirebaseAuthRepository
-import com.example.capstoneproject.data.repository.FirebaseFavoriteRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
