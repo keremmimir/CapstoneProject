@@ -6,11 +6,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class FirebaseAuthRepository() {
-
-    private val auth = FirebaseAuth.getInstance()
-    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+class FirebaseAuthRepository @Inject constructor(
+    private val auth: FirebaseAuth,
+    private val firestore: FirebaseFirestore
+) {
 
     suspend fun signUp(
         name: String,
@@ -41,7 +42,7 @@ class FirebaseAuthRepository() {
         }
     }
 
-    fun signOut(){
+    fun signOut() {
         auth.signOut()
     }
 

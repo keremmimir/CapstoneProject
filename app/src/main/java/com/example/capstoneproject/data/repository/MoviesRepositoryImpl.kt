@@ -2,12 +2,12 @@ package com.example.capstoneproject.data.repository
 
 import com.example.capstoneproject.model.DataModel
 import com.example.capstoneproject.network.IMDbMoviesAPI
-import com.example.capstoneproject.network.IMDbMoviesAPIService
 import com.example.capstoneproject.network.response.toDataModel
+import javax.inject.Inject
 
-class MoviesRepositoryImpl : MoviesRepository {
-
-    private val imdbMoviesAPI: IMDbMoviesAPI = IMDbMoviesAPIService.getIMDbAPI()
+class MoviesRepositoryImpl @Inject constructor(
+    private val imdbMoviesAPI: IMDbMoviesAPI
+) : MoviesRepository {
 
     override suspend fun getMovies(): Result<List<DataModel>> {
         return try {

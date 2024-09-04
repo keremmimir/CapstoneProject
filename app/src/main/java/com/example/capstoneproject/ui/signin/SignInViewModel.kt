@@ -6,11 +6,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.capstoneproject.Event
 import com.example.capstoneproject.data.repository.FirebaseAuthRepository
 import com.google.firebase.auth.FirebaseUser
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SignInViewModel : ViewModel() {
+@HiltViewModel
+class SignInViewModel @Inject constructor(
+    private val authRepository: FirebaseAuthRepository
+) : ViewModel() {
 
-    private val authRepository = FirebaseAuthRepository()
     val authResult = MutableLiveData<Event<Result<String>?>>()
 
     fun signIn(email: String, password: String) {

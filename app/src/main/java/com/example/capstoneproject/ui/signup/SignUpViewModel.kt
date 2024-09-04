@@ -5,16 +5,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.capstoneproject.Event
 import com.example.capstoneproject.data.repository.FirebaseAuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SignUpViewModel : ViewModel() {
+@HiltViewModel
+class SignUpViewModel @Inject constructor(
+    private val authRepository: FirebaseAuthRepository
+) : ViewModel() {
 
-    private val authRepository = FirebaseAuthRepository()
     val authResult = MutableLiveData<Event<Result<String>?>>()
 
     fun signUp(name: String, surname: String, email: String, password: String) {
         viewModelScope.launch {
-            val result = authRepository.signUp(name,surname,email,password)
+            val result = authRepository.signUp(name, surname, email, password)
             authResult.value = Event(result)
         }
     }

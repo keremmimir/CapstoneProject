@@ -15,7 +15,9 @@ import com.bumptech.glide.Glide
 import com.example.capstoneproject.R
 import com.example.capstoneproject.constants.Constants
 import com.example.capstoneproject.databinding.FragmentDetailBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailFragment : Fragment() {
 
     private var _binding: FragmentDetailBinding? = null

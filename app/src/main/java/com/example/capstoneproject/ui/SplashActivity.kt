@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import com.example.capstoneproject.databinding.ActivitySplashBinding
+import com.example.capstoneproject.ui.main.MainActivity
 
 class SplashActivity : AppCompatActivity() {
 

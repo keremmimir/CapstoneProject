@@ -12,7 +12,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.capstoneproject.constants.Constants
 import com.example.capstoneproject.ui.adapter.MoviesAdapter
 import com.example.capstoneproject.databinding.FragmentFavoriteBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FavoriteListFragment : Fragment() {
 
     private var _binding: FragmentFavoriteBinding? = null

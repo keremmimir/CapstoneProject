@@ -6,19 +6,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.capstoneproject.data.repository.FirebaseAuthRepository
 import com.example.capstoneproject.data.repository.FirebaseFavoriteRepository
-import com.example.capstoneproject.data.repository.MoviesRepository
 import com.example.capstoneproject.model.DataModel
 import com.example.capstoneproject.data.repository.MoviesRepositoryImpl
 import com.example.capstoneproject.model.Type
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ListViewModel :
+@HiltViewModel
+class ListViewModel @Inject constructor(
+    private val moviesRepository: MoviesRepositoryImpl,
+    private val favoriteRepository: FirebaseFavoriteRepository,
+    authRepository: FirebaseAuthRepository
+) :
     ViewModel() {
-    private val moviesRepository: MoviesRepository = MoviesRepositoryImpl()
-    private val favoriteRepository = FirebaseFavoriteRepository()
-    private val authRepository = FirebaseAuthRepository()
-    private val userId = authRepository.getCurrentUser()?.uid
 
+    private val userId = authRepository.getCurrentUser()?.uid
     val movies = MutableLiveData<List<DataModel>>()
     val isLoading = MutableLiveData<Boolean>()
     val filteredItems = MutableLiveData<List<DataModel>>()

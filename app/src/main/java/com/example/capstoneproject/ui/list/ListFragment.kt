@@ -14,7 +14,9 @@ import com.example.capstoneproject.ui.adapter.MoviesAdapter
 import com.example.capstoneproject.databinding.FragmentListBinding
 import com.example.capstoneproject.model.Type
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ListFragment : Fragment() {
 
     private var _binding: FragmentListBinding? = null

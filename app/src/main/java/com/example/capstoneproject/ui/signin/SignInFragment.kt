@@ -11,7 +11,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.capstoneproject.databinding.FragmentSignInBinding
 import com.example.capstoneproject.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignInFragment : Fragment() {
 
     private var _binding: FragmentSignInBinding? = null

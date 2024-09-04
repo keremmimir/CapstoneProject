@@ -2,9 +2,11 @@ package com.example.capstoneproject.data.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class FirebaseFavoriteRepository  {
-    private val firestore = FirebaseFirestore.getInstance()
+class FirebaseFavoriteRepository @Inject constructor(
+    private val firestore: FirebaseFirestore
+)  {
 
     // Favori ekleme
     suspend fun addFavorite(userId: String, imdbId: String) {

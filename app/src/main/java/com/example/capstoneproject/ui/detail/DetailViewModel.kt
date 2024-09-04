@@ -6,18 +6,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.capstoneproject.data.repository.FirebaseAuthRepository
 import com.example.capstoneproject.data.repository.FirebaseFavoriteRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DetailViewModel : ViewModel() {
+@HiltViewModel
+class DetailViewModel @Inject constructor(
+    private val favoriteRepository: FirebaseFavoriteRepository,
+    authRepository: FirebaseAuthRepository
+) : ViewModel() {
 
-    private val favoriteRepository = FirebaseFavoriteRepository()
-    private val authRepository = FirebaseAuthRepository()
     private val userId = authRepository.getCurrentUser()?.uid
 
     private val _isFavorite = MutableLiveData<Boolean>()
-    val isFavorite : LiveData<Boolean> = _isFavorite
+    val isFavorite: LiveData<Boolean> = _isFavorite
 
-    fun setInitialFavorite(isFavorite : Boolean){
+    fun setInitialFavorite(isFavorite: Boolean) {
         _isFavorite.postValue(isFavorite)
     }
 
