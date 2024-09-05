@@ -18,15 +18,11 @@ class MainViewModel @Inject constructor(
     val error = MutableLiveData<Event<String>>()
     fun signOut() {
         viewModelScope.launch {
-            try {
-                val result = authRepository.signOut()
-                if (result.isSuccess) {
-                    authResult.value = Event(result)
-                } else {
-                    error.value = Event(result.exceptionOrNull()?.message ?: "Error")
-                }
-            } catch (e: Exception) {
-                error.value = Event(e.message ?: "Error")
+            val result = authRepository.signOut()
+            if (result.isSuccess) {
+                authResult.value = Event(result)
+            } else {
+                error.value = Event(result.exceptionOrNull()?.message ?: "Error")
             }
         }
     }

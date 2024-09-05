@@ -56,6 +56,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        observerData()
     }
 
     private fun showSignOutConfirmationDialog() {
@@ -74,7 +76,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun signOut() {
         mainViewModel.signOut()
+    }
 
+    private fun observerData() {
         mainViewModel.authResult.observe(this) { event ->
             event.getContentIfNotHandled()?.let { result ->
                 result.onSuccess { message ->
@@ -88,4 +92,5 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
 
