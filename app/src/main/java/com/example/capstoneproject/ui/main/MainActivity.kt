@@ -6,6 +6,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -72,8 +74,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun signOut() {
         mainViewModel.signOut()
-        Toast.makeText(this, getString(R.string.logout_successful), Toast.LENGTH_LONG).show()
-        navController.navigate(R.id.signInFragment)
+
+        mainViewModel.authResult.observe(this) { event ->
+            event.getContentIfNotHandled()?.let { result ->
+                result.onSuccess { message ->
+                    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                    navController.navigate(R.id.signInFragment)
+                }.onFailure { exception ->
+                    Toast.makeText(this, exception.message ?: "Unknown error", Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+        }
     }
 }
 

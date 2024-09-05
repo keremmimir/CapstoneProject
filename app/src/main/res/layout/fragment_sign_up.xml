@@ -120,7 +120,7 @@
                 android:background="@drawable/custom_button"
                 android:text="@string/sign_up"
                 android:textColor="@color/white"
-                android:padding="@dimen/padding_small"
+                android:padding="@dimen/padding_medium"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/signUpPassword"
                 app:layout_constraintHorizontal_bias="0.5"

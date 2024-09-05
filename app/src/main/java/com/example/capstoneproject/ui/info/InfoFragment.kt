@@ -1,4 +1,4 @@
-package com.example.capstoneproject.ui.first
+package com.example.capstoneproject.ui.info
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.example.capstoneproject.databinding.FragmentFirstBinding
+import com.example.capstoneproject.databinding.FragmentInfoBinding
 import com.google.firebase.auth.FirebaseAuth
 
-class FirstFragment : Fragment() {
+class InfoFragment : Fragment() {
 
-    private var _binding: FragmentFirstBinding? = null
+    private var _binding: FragmentInfoBinding? = null
     private val binding get() = _binding!!
     private lateinit var auth: FirebaseAuth
 
@@ -20,7 +20,7 @@ class FirstFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentFirstBinding.inflate(inflater, container, false)
+        _binding = FragmentInfoBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -30,15 +30,15 @@ class FirstFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
 
         if (auth.currentUser != null) {
-            val action = FirstFragmentDirections.actionFirstFragmentToHomeFragment()
+            val action = InfoFragmentDirections.actionFirstFragmentToHomeFragment()
             findNavController().navigate(action)
         }
         binding.signInButton.setOnClickListener {
-            val action = FirstFragmentDirections.actionFirstFragmentToSignInFragment()
+            val action = InfoFragmentDirections.actionFirstFragmentToSignInFragment()
             findNavController().navigate(action)
         }
         binding.createAccountButton.setOnClickListener {
-            val action = FirstFragmentDirections.actionFirstFragmentToSignUpFragment()
+            val action = InfoFragmentDirections.actionFirstFragmentToSignUpFragment()
             findNavController().navigate(action)
         }
     }

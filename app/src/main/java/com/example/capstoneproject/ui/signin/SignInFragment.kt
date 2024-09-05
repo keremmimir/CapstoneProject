@@ -36,20 +36,20 @@ class SignInFragment : Fragment() {
     }
 
     private fun observeData() {
-        signInViewModel.authResult.observe(viewLifecycleOwner, Observer { event ->
+        signInViewModel.authResult.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { result ->
-                if (result.isSuccess) {
-                    Toast.makeText(requireContext(), result.getOrNull(), Toast.LENGTH_LONG).show()
+                result.onSuccess { message ->
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
                     navigateToHomePage()
-                } else {
+                }.onFailure { exception ->
                     Toast.makeText(
                         requireContext(),
-                        result.exceptionOrNull()?.message,
+                        exception.message ?: "Unknown error",
                         Toast.LENGTH_LONG
                     ).show()
                 }
             }
-        })
+        }
 
         signInViewModel.error.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { message ->
@@ -77,10 +77,6 @@ class SignInFragment : Fragment() {
                 val action = SignInFragmentDirections.actionSignInFragmentToSignUpFragment()
                 findNavController().navigate(action)
             }
-        }
-        val currentUser = signInViewModel.getCurrentUser()
-        if (currentUser != null) {
-            navigateToHomePage()
         }
     }
 

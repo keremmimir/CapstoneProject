@@ -36,20 +36,20 @@ class SignUpFragment : Fragment() {
     }
 
     fun observeData() {
-        signUpViewModel.authResult.observe(viewLifecycleOwner, Observer { event ->
+        signUpViewModel.authResult.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { result ->
-                if (result.isSuccess) {
-                    Toast.makeText(requireContext(), result.getOrNull(), Toast.LENGTH_LONG).show()
+                result.onSuccess { message ->
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
                     navigateToSignInPage()
-                } else {
+                }.onFailure { exception ->
                     Toast.makeText(
                         requireContext(),
-                        result.exceptionOrNull()?.message,
+                        exception.message ?: "Unknown error",
                         Toast.LENGTH_LONG
                     ).show()
                 }
             }
-        })
+        }
 
         signUpViewModel.error.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { message ->

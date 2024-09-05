@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.first.FirstFragment"
+    tools:context=".ui.info.InfoFragment"
     android:background="@color/background">
 
     <TextView
@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_xxlarge"
-        android:text="@string/welcome_popzone"
+        android:text="@string/welcome_watchZone"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_large"
         android:textStyle="bold"

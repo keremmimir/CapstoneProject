@@ -42,8 +42,13 @@ class FirebaseAuthRepository @Inject constructor(
         }
     }
 
-    fun signOut() {
-        auth.signOut()
+    fun signOut(): Result<String> {
+        return try {
+            auth.signOut()
+            Result.success(Constants.LOGOUT_RESULT)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     fun getCurrentUser(): FirebaseUser? {
