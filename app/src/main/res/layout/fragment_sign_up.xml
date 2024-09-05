@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".view.SignUpFragment">
+    tools:context=".ui.signup.SignUpFragment">
 
     <TextView
         android:id="@+id/SignUpText"
@@ -120,7 +120,7 @@
                 android:background="@drawable/custom_button"
                 android:text="@string/sign_up"
                 android:textColor="@color/white"
-                android:padding="@dimen/padding_small"
+                android:padding="@dimen/padding_medium"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/signUpPassword"
                 app:layout_constraintHorizontal_bias="0.5"

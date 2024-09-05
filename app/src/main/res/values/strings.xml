@@ -23,4 +23,13 @@
     <string name="imdbLink">Go to IMDb -></string>
     <string name="sign_in_empty">Email and Password cannot be empty</string>
     <string name="sign_up_empty">Name, surname, email, and password cannot be empty</string>
+    <string name="watch_zone">WatchZone</string>
+    <string name="welcome_watchZone">Welcome WatchZone</string>
+    <string name="info">Find the best 100 films and series in our app. Save your favorites and access IMDb for more information.</string>
+    <string name="logout_title">Logout</string>
+    <string name="logout_message">Are you sure you want to log out?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="logout_successful">Logout successful</string>
+    <string name="empty">Empty</string>
 </resources>

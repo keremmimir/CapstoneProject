@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.ListFragment"
-    android:background="@color/background">
+    android:background="@color/background"
+    tools:context=".ui.list.ListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recylerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/margin_xxlarge"
+        android:layout_marginTop="@dimen/margin_small"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchView"
         tools:listitem="@layout/list_item" />
 
     <ImageView
@@ -36,10 +36,40 @@
         android:layout_marginStart="@dimen/margin_small"
         android:text="@string/back_list_menu"
         android:textColor="@color/white"
-        android:textStyle="bold"
         android:textSize="@dimen/text_size_xsmall"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/backHome"
         app:layout_constraintStart_toEndOf="@id/backHome"
         app:layout_constraintTop_toTopOf="@id/backHome" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/animation_progress_bar"
+        app:lottie_speed="2.0" />
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:background="@drawable/search_view_background"
+        android:focusable="false"
+        app:closeIcon="@drawable/ic_close"
+        app:iconifiedByDefault="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/backHome"
+        app:layout_constraintTop_toBottomOf="@+id/backHome"
+        app:searchHintIcon="@null"
+        app:searchIcon="@drawable/ic_search"
+        app:theme="@style/SearchViewStyle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,4 +17,5 @@ data class DataModel(
     val year: String?,
     val imdbId: String?,
     val imdbLink: String?,
+    val isFavorite: Boolean = false
 ) : Parcelable
