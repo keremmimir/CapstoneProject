@@ -24,7 +24,7 @@ class ListViewModel @Inject constructor(
     private val userId = authRepository.getCurrentUser()?.uid
     val movies = MutableLiveData<List<DataModel>>()
     val isLoading = MutableLiveData<Boolean>()
-    val filteredItems = MutableLiveData<List<DataModel>>()
+    val filteredItems = MutableLiveData<List<DataModel>?>()
     val error = MutableLiveData<Event<String>>()
 
 
