@@ -1,3 +1,35 @@
 <resources>
     <string name="app_name">CapstoneProject</string>
+
+    <string name="sign_up">CREATE ACCOUNT</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="surname">Surname</string>
+    <string name="name">Name</string>
+    <string name="title">Hitman\'s Wife\'s Bodyguard</string>
+    <string name="rating">7.8</string>
+    <string name="genre">Action, Comedy, Crime</string>
+    <string name="year">2016</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="create_account">Create an account</string>
+    <string name="description_header">Description</string>
+    <string name="description">When a ronin requesting seppuku at a feudal lord\'s palace is told of the brutal suicide of another ronin who previously visited, he reveals how their pasts are intertwined - and in doing so challenges the clan\'s integrity.</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_favorite">Favorite</string>
+    <string name="menu_logout">Logout</string>
+    <string name="back_list_menu">BACK LIST MENU</string>
+    <string name="back_list">BACK LIST</string>
+    <string name="back">BACK</string>
+    <string name="imdbLink">Go to IMDb -></string>
+    <string name="sign_in_empty">Email and Password cannot be empty</string>
+    <string name="sign_up_empty">Name, surname, email, and password cannot be empty</string>
+    <string name="watch_zone">WatchZone</string>
+    <string name="welcome_watchZone">Welcome WatchZone</string>
+    <string name="info">Find the best 100 films and series in our app. Save your favorites and access IMDb for more information.</string>
+    <string name="logout_title">Logout</string>
+    <string name="logout_message">Are you sure you want to log out?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="logout_successful">Logout successful</string>
+    <string name="empty">Empty</string>
 </resources>
